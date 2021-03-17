@@ -7,9 +7,8 @@ using System.Text;
 namespace Domain
 {
     
-    public class Checkbox
+    public class Checkbox: Pitanje
     {
-        public Pitanje Pitanje { get; set; }
         public string TacanOdgovor { get; set; }
         public int TacanBodovi { get; set; }
         public string NetacanOdgovor1 { get; set; }

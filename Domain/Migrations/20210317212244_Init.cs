@@ -37,19 +37,20 @@ namespace Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lekcije",
+                name: "Lekcija",
                 columns: table => new
                 {
+                    LekcijaId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     KursId = table.Column<int>(nullable: false),
-                    LekcijaId = table.Column<int>(nullable: false),
                     Naziv = table.Column<string>(nullable: true),
                     Sadrzaj = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lekcije", x => new { x.LekcijaId, x.KursId });
+                    table.PrimaryKey("PK_Lekcija", x => new { x.KursId, x.LekcijaId });
                     table.ForeignKey(
-                        name: "FK_Lekcije_Kursevi_KursId",
+                        name: "FK_Lekcija_Kursevi_KursId",
                         column: x => x.KursId,
                         principalTable: "Kursevi",
                         principalColumn: "KursId",
@@ -57,7 +58,7 @@ namespace Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pohadjanja",
+                name: "Pohadjanje",
                 columns: table => new
                 {
                     KorisnikId = table.Column<int>(nullable: false),
@@ -66,15 +67,15 @@ namespace Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pohadjanja", x => new { x.KorisnikId, x.KursId });
+                    table.PrimaryKey("PK_Pohadjanje", x => new { x.KorisnikId, x.KursId });
                     table.ForeignKey(
-                        name: "FK_Pohadjanja_Korisnici_KorisnikId",
+                        name: "FK_Pohadjanje_Korisnici_KorisnikId",
                         column: x => x.KorisnikId,
                         principalTable: "Korisnici",
                         principalColumn: "KorisnikId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Pohadjanja_Kursevi_KursId",
+                        name: "FK_Pohadjanje_Kursevi_KursId",
                         column: x => x.KursId,
                         principalTable: "Kursevi",
                         principalColumn: "KursId",
@@ -85,8 +86,8 @@ namespace Domain.Migrations
                 name: "Testovi",
                 columns: table => new
                 {
-                    KursId = table.Column<int>(nullable: false),
                     TestId = table.Column<int>(nullable: false),
+                    KursId = table.Column<int>(nullable: false),
                     Nivo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -101,40 +102,61 @@ namespace Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pitanja",
+                name: "Pitanje",
                 columns: table => new
                 {
                     PitanjeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TestId = table.Column<int>(nullable: true),
-                    TestKursId = table.Column<int>(nullable: true),
+                    TestId = table.Column<int>(nullable: false),
+                    TestKursId = table.Column<int>(nullable: false),
                     Naziv = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pitanja", x => x.PitanjeId);
+                    table.PrimaryKey("PK_Pitanje", x => new { x.TestId, x.TestKursId, x.PitanjeId });
                     table.ForeignKey(
-                        name: "FK_Pitanja_Testovi_TestId_TestKursId",
+                        name: "FK_Pitanje_Testovi_TestId_TestKursId",
                         columns: x => new { x.TestId, x.TestKursId },
                         principalTable: "Testovi",
                         principalColumns: new[] { "TestId", "KursId" },
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Polaganje",
+                columns: table => new
+                {
+                    KorisnikId = table.Column<int>(nullable: false),
+                    TestId = table.Column<int>(nullable: false),
+                    TestKursId = table.Column<int>(nullable: false),
+                    BodoviT = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Polaganje", x => new { x.KorisnikId, x.TestId });
+                    table.ForeignKey(
+                        name: "FK_Polaganje_Korisnici_KorisnikId",
+                        column: x => x.KorisnikId,
+                        principalTable: "Korisnici",
+                        principalColumn: "KorisnikId",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Polaganje_Testovi_TestId_TestKursId",
+                        columns: x => new { x.TestId, x.TestKursId },
+                        principalTable: "Testovi",
+                        principalColumns: new[] { "TestId", "KursId" },
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lekcije_KursId",
-                table: "Lekcije",
+                name: "IX_Pohadjanje_KursId",
+                table: "Pohadjanje",
                 column: "KursId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pitanja_TestId_TestKursId",
-                table: "Pitanja",
+                name: "IX_Polaganje_TestId_TestKursId",
+                table: "Polaganje",
                 columns: new[] { "TestId", "TestKursId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Pohadjanja_KursId",
-                table: "Pohadjanja",
-                column: "KursId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Testovi_KursId",
@@ -145,19 +167,22 @@ namespace Domain.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Lekcije");
+                name: "Lekcija");
 
             migrationBuilder.DropTable(
-                name: "Pitanja");
+                name: "Pitanje");
 
             migrationBuilder.DropTable(
-                name: "Pohadjanja");
+                name: "Pohadjanje");
 
             migrationBuilder.DropTable(
-                name: "Testovi");
+                name: "Polaganje");
 
             migrationBuilder.DropTable(
                 name: "Korisnici");
+
+            migrationBuilder.DropTable(
+                name: "Testovi");
 
             migrationBuilder.DropTable(
                 name: "Kursevi");

@@ -7,9 +7,8 @@ using System.Text;
 namespace Domain
 {
     
-    public class Dopuna
+    public class Dopuna: Pitanje
     {
-        public Pitanje Pitanje { get; set; }
         public string TacanOdgovor { get; set; }
         public int TacanBodovi { get; set; }
     }
