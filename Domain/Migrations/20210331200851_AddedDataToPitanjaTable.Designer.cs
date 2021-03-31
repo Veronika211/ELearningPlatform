@@ -4,14 +4,16 @@ using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Domain.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210331200851_AddedDataToPitanjaTable")]
+    partial class AddedDataToPitanjaTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,6 +132,16 @@ namespace Domain.Migrations
                     b.ToTable("Pitanja");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Pitanje");
+
+                    b.HasData(
+                        new
+                        {
+                            PitanjeId = 1,
+                            Discriminator = "Checkbox",
+                            Naziv = "Koja su cetiri osnovna principa OOP?",
+                            TestId = 4,
+                            TestKursId = 2
+                        });
                 });
 
             modelBuilder.Entity("Domain.Pohadjanje", b =>
@@ -290,57 +302,6 @@ namespace Domain.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Checkbox");
-
-                    b.HasData(
-                        new
-                        {
-                            PitanjeId = 1,
-                            Discriminator = "Checkbox",
-                            Naziv = "Koja su cetiri osnovna principa OOP?",
-                            TestId = 4,
-                            TestKursId = 2,
-                            NetacanOdgovor1 = "Nasledjivanje, modularnost, apstrakcija, enkapsulacija",
-                            NetacanOdgovor2 = "Nasledjivanje, modularnost, asocijacija, enkapsulacija",
-                            NetacanOdgovor3 = "Klasifikacija, modularnost, apstrakcija, enkapsulacija",
-                            TacanBodovi = 5,
-                            TacanOdgovor = "Nasledjivanje, modularnost, polumorfizam, enkapsulacija"
-                        },
-                        new
-                        {
-                            PitanjeId = 2,
-                            Discriminator = "Checkbox",
-                            Naziv = "Arhitektura informacionih sistema je?",
-                            TestId = 7,
-                            TestKursId = 3,
-                            NetacanOdgovor1 = "Dvonivojska",
-                            NetacanOdgovor2 = "Sestonivojska",
-                            NetacanOdgovor3 = "Petonivojska",
-                            TacanBodovi = 5,
-                            TacanOdgovor = "Tronivojska"
-                        },
-                        new
-                        {
-                            PitanjeId = 3,
-                            Discriminator = "Dopuna",
-                            Naziv = "Navedite validator u ASP.NET-u koji se koristi kako bismo se uverili da se vrednosti u dve razlicite kontrole podudaraju",
-                            TestId = 2,
-                            TestKursId = 1,
-                            TacanBodovi = 10,
-                            TacanOdgovor = "Compare Validator control"
-                        },
-                        new
-                        {
-                            PitanjeId = 4,
-                            Discriminator = "Checkbox",
-                            Naziv = "Navedite tri vrste caching-a u ASP.NET-u",
-                            TestId = 3,
-                            TestKursId = 1,
-                            NetacanOdgovor1 = "Output Caching,In Caching,Data Caching",
-                            NetacanOdgovor2 = "Output Caching,Fragment Caching,Type Caching",
-                            NetacanOdgovor3 = "In Caching,Fragment Caching,Data Caching",
-                            TacanBodovi = 15,
-                            TacanOdgovor = "Output Caching,Fragment Caching,Data Caching"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Dopuna", b =>

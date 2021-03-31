@@ -5,21 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20210313171527_Init.cs" />
-    <Compile Remove="Migrations\20210313171527_Init.Designer.cs" />
-    <Compile Remove="Migrations\20210313181639_AddedPohadjanja.cs" />
-    <Compile Remove="Migrations\20210313181639_AddedPohadjanja.Designer.cs" />
-    <Compile Remove="Migrations\20210313182012_AddedPolaganja.cs" />
-    <Compile Remove="Migrations\20210313182012_AddedPolaganja.Designer.cs" />
-    <Compile Remove="Migrations\20210313211212_Pitanja.cs" />
-    <Compile Remove="Migrations\20210313211212_Pitanja.Designer.cs" />
-    <Compile Remove="Migrations\20210313235628_PitanjaUpdatedDopune.cs" />
-    <Compile Remove="Migrations\20210313235628_PitanjaUpdatedDopune.Designer.cs" />
-    <Compile Remove="Migrations\20210314002435_Polaganje.cs" />
-    <Compile Remove="Migrations\20210314002435_Polaganje.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">
@@ -27,10 +12,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.9" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

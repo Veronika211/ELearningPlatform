@@ -13,5 +13,10 @@ namespace Domain
         public int BrPoena { get; set; }
         public List<Pohadjanje> Kursevi { get; set; }
         public List<Polaganje> Testovi { get; set; }
+
+        public override string ToString()
+        {
+            return $"{KorisnikId}: {Ime} {Prezime}";
+        }
     }
 }

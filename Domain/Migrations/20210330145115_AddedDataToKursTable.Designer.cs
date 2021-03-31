@@ -4,14 +4,16 @@ using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Domain.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210330145115_AddedDataToKursTable")]
+    partial class AddedDataToKursTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,80 +196,6 @@ namespace Domain.Migrations
                     b.HasIndex("KursId");
 
                     b.ToTable("Testovi");
-
-                    b.HasData(
-                        new
-                        {
-                            TestId = 1,
-                            KursId = 1,
-                            Nivo = "I"
-                        },
-                        new
-                        {
-                            TestId = 2,
-                            KursId = 1,
-                            Nivo = "II"
-                        },
-                        new
-                        {
-                            TestId = 3,
-                            KursId = 1,
-                            Nivo = "III"
-                        },
-                        new
-                        {
-                            TestId = 4,
-                            KursId = 2,
-                            Nivo = "I"
-                        },
-                        new
-                        {
-                            TestId = 5,
-                            KursId = 2,
-                            Nivo = "II"
-                        },
-                        new
-                        {
-                            TestId = 6,
-                            KursId = 2,
-                            Nivo = "III"
-                        },
-                        new
-                        {
-                            TestId = 7,
-                            KursId = 3,
-                            Nivo = "I"
-                        },
-                        new
-                        {
-                            TestId = 8,
-                            KursId = 3,
-                            Nivo = "II"
-                        },
-                        new
-                        {
-                            TestId = 9,
-                            KursId = 3,
-                            Nivo = "III"
-                        },
-                        new
-                        {
-                            TestId = 10,
-                            KursId = 4,
-                            Nivo = "I"
-                        },
-                        new
-                        {
-                            TestId = 11,
-                            KursId = 4,
-                            Nivo = "II"
-                        },
-                        new
-                        {
-                            TestId = 12,
-                            KursId = 4,
-                            Nivo = "III"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Checkbox", b =>
@@ -290,57 +218,6 @@ namespace Domain.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Checkbox");
-
-                    b.HasData(
-                        new
-                        {
-                            PitanjeId = 1,
-                            Discriminator = "Checkbox",
-                            Naziv = "Koja su cetiri osnovna principa OOP?",
-                            TestId = 4,
-                            TestKursId = 2,
-                            NetacanOdgovor1 = "Nasledjivanje, modularnost, apstrakcija, enkapsulacija",
-                            NetacanOdgovor2 = "Nasledjivanje, modularnost, asocijacija, enkapsulacija",
-                            NetacanOdgovor3 = "Klasifikacija, modularnost, apstrakcija, enkapsulacija",
-                            TacanBodovi = 5,
-                            TacanOdgovor = "Nasledjivanje, modularnost, polumorfizam, enkapsulacija"
-                        },
-                        new
-                        {
-                            PitanjeId = 2,
-                            Discriminator = "Checkbox",
-                            Naziv = "Arhitektura informacionih sistema je?",
-                            TestId = 7,
-                            TestKursId = 3,
-                            NetacanOdgovor1 = "Dvonivojska",
-                            NetacanOdgovor2 = "Sestonivojska",
-                            NetacanOdgovor3 = "Petonivojska",
-                            TacanBodovi = 5,
-                            TacanOdgovor = "Tronivojska"
-                        },
-                        new
-                        {
-                            PitanjeId = 3,
-                            Discriminator = "Dopuna",
-                            Naziv = "Navedite validator u ASP.NET-u koji se koristi kako bismo se uverili da se vrednosti u dve razlicite kontrole podudaraju",
-                            TestId = 2,
-                            TestKursId = 1,
-                            TacanBodovi = 10,
-                            TacanOdgovor = "Compare Validator control"
-                        },
-                        new
-                        {
-                            PitanjeId = 4,
-                            Discriminator = "Checkbox",
-                            Naziv = "Navedite tri vrste caching-a u ASP.NET-u",
-                            TestId = 3,
-                            TestKursId = 1,
-                            NetacanOdgovor1 = "Output Caching,In Caching,Data Caching",
-                            NetacanOdgovor2 = "Output Caching,Fragment Caching,Type Caching",
-                            NetacanOdgovor3 = "In Caching,Fragment Caching,Data Caching",
-                            TacanBodovi = 15,
-                            TacanOdgovor = "Output Caching,Fragment Caching,Data Caching"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Dopuna", b =>
@@ -382,62 +259,6 @@ namespace Domain.Migrations
 
                             b1.WithOwner("Kurs")
                                 .HasForeignKey("KursId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    KursId = 1,
-                                    LekcijaId = 1,
-                                    Naziv = "Tipovi objekata"
-                                },
-                                new
-                                {
-                                    KursId = 1,
-                                    LekcijaId = 2,
-                                    Naziv = "Konstruktori"
-                                },
-                                new
-                                {
-                                    KursId = 2,
-                                    LekcijaId = 3,
-                                    Naziv = "Osnove OOP"
-                                },
-                                new
-                                {
-                                    KursId = 3,
-                                    LekcijaId = 4,
-                                    Naziv = "Tronivojska arhitektura"
-                                },
-                                new
-                                {
-                                    KursId = 3,
-                                    LekcijaId = 5,
-                                    Naziv = "Implementacija korisnickog interfejsa"
-                                },
-                                new
-                                {
-                                    KursId = 4,
-                                    LekcijaId = 6,
-                                    Naziv = "Mesovite igre"
-                                },
-                                new
-                                {
-                                    KursId = 4,
-                                    LekcijaId = 7,
-                                    Naziv = "Dilema zatvorenika"
-                                },
-                                new
-                                {
-                                    KursId = 4,
-                                    LekcijaId = 8,
-                                    Naziv = "Igre koordinacije"
-                                },
-                                new
-                                {
-                                    KursId = 4,
-                                    LekcijaId = 9,
-                                    Naziv = "Igre antikoordinacije"
-                                });
                         });
                 });
 
