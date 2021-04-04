@@ -1,0 +1,8 @@
+﻿@model Kurs
+
+<form method="post" asp-controller="Kurs" asp-action="Create">
+    <label>Naziv:</label>
+    <input type ="text" asp-for="NazivKursa" />
+    <span asp-validation-for="NazivKursa"></span>
+    <input type ="submit" value="Dodaj"/>
+</form>

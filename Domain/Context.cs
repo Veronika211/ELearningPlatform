@@ -11,6 +11,7 @@ namespace Domain
     {
 
         public DbSet<Korisnik> Korisnici { get; set; }
+        public DbSet<Administrator> Administratori { get; set; }
         public DbSet<Kurs> Kursevi { get; set; }
         public DbSet<Test> Testovi { get; set; }
         public DbSet<Pitanje> Pitanja { get; set; }
@@ -128,6 +129,7 @@ namespace Domain
                 NetacanOdgovor2 = "Output Caching,Fragment Caching,Type Caching",
                 NetacanOdgovor3 = "In Caching,Fragment Caching,Data Caching"
             });
+            modelBuilder.Entity<Administrator>().HasData(new { AdministratorId = 1, Ime = "Tatjana", Prezime = "Stojanovic", Username = "ts", Password = "ts"});
         }
     }
 }

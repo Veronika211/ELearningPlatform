@@ -1,0 +1,10 @@
+﻿@model Kurs
+
+<h3> Kurs</h3>
+<h3>Redni broj: @Model.KursId</h3>
+<h3>Naziv: @Model.NazivKursa</h3>
+<h3>Lekcije:</h3>
+@foreach (Lekcija l in Model.Lekcije)
+{
+    <h6>@l.Naziv</h6>
+}
