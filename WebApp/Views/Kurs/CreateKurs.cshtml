@@ -2,7 +2,9 @@
 
 <form method="post" asp-controller="Kurs" asp-action="Create">
     <label>Naziv:</label>
-    <input type ="text" asp-for="NazivKursa" />
+    <input type="text" asp-for="NazivKursa" />
     <span asp-validation-for="NazivKursa"></span>
-    <input type ="submit" value="Dodaj"/>
+    @Html.ValidationMessage("NazivKursaValidation") 
+  @*  ne moze da radi onako jer nazivkursavalidation nije properti pa mora preko html taga*@
+    <input type="submit" value="Dodaj" />
 </form>

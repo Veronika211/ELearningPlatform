@@ -42,6 +42,12 @@ namespace WebApp.Controllers
             {
                 return View("CreateKurs");
             }
+            bool exists = unitOfWork.Kurs.Search(k => k.NazivKursa == kurs.NazivKursa).Any();
+            if (exists)
+            {
+                ModelState.AddModelError("NazivKursaValidation", "Ovaj kurs vec postoji!");
+                    return View("CreateKurs");
+            }
             unitOfWork.Kurs.Add(kurs);
             unitOfWork.Commit();
             return Kurs();

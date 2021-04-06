@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Data.Implementation
@@ -33,5 +34,11 @@ namespace Data.Implementation
         {
             return context.Kursevi.ToList();
         }
+
+        public List<Kurs> Search(Expression<Func<Kurs, bool>> k)
+        {
+            return context.Kursevi.Where(k).ToList();
+        }
+
     }
 }
