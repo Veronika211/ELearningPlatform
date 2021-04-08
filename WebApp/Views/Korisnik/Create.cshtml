@@ -1,0 +1,82 @@
+﻿@model WebApp.Models.CreateKorisnikViewModel
+
+@{
+    ViewData["Title"] = "Dodaj korisnika";
+}
+
+<h1>Create</h1>
+
+<h4>Korisnik</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Korisnik.Ime" class="control-label"></label>
+                <input asp-for="Korisnik.Ime" class="form-control" />
+                <span asp-validation-for="Korisnik.Ime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Korisnik.Prezime" class="control-label"></label>
+                <input asp-for="Korisnik.Prezime" class="form-control" />
+                <span asp-validation-for="Korisnik.Prezime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Korisnik.Username" class="control-label"></label>
+                <input asp-for="Korisnik.Username" class="form-control" />
+                <span asp-validation-for="Korisnik.Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Korisnik.Password" class="control-label"></label>
+                <input asp-for="Korisnik.Password" class="form-control" />
+                <span asp-validation-for="Korisnik.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Korisnik.BrPoena" class="control-label"></label>
+                <input asp-for="Korisnik.BrPoena" class="form-control" />
+                <span asp-validation-for="Korisnik.BrPoena" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Kurs:</label>
+                @Html.DropDownList("Kurs", Model.Kursevi, new { @class = "form-control", @id = "pohadjanje-select" })
+            </div>
+            <button class="btn btn-primary" id="add-pohadjanje">Dodaj kurs</button>
+            <table class="table" id="pohadjanja">
+                <thead>
+                    <tr>
+                        <th> Redni broj </th>
+                        <th> Kurs Id </th>
+                        <th> Naziv kursa </th>
+                        @*     na ovo mesto mozemo za Polaganje da dodamo da se vidi Kurs za Test (3:12 vezbe 9.)*@
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{ 
+<script>
+    $('#add-pohadjanje').click(function (e) {
+        e.preventDefault();
+        jQuery.ajax({
+            url: '@Url.ActionLink("AddPohadjanje","Korisnik")',
+            method: 'post',
+            data: { KursId: $('#pohadjanje-select').val(), RedniBroj: $('#pohadjanja tbody tr').length},
+            success: function (data) {
+                $('#pohadjanja tbody').append(data);
+            },
+            error: function () {
+                alert("Error!");
+            }
+        });
+    });
+</script>
+}
+

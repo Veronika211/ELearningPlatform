@@ -1,0 +1,10 @@
+﻿@model WebApp.Models.PohadjanjeViewModel
+
+<tr>
+    <td>@(Model.RedniBroj+1)</td>
+    <td>
+        @Model.KursId
+        <input hidden value="@Model.KursId" name="Korisnik.Kursevi[@Model.RedniBroj].KursId" />
+    </td> @*//dodati ime kursa i bodove*@
+    <td>@Model.NazivKursa</td>
+</tr>
