@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Data.UnitOfWork;
 using Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using WebApp.Filters;
 using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [LoggedInKorisnik]
     public class KorisnikController : Controller
     {
         private readonly IUnitOfWork uow;
@@ -19,18 +22,62 @@ namespace WebApp.Controllers
             this.uow = uow;
         }
         // GET: KorisnikController
+        [NotLoggedIn]
         public ActionResult Index()
         {
-            return View();
+            return View("Login"); //ne znam treba li ovo
+        }
+        [HttpPost]
+        public ActionResult Login(LoginViewModel model)
+        {
+            try
+            {
+                Korisnik korisnik = uow.Korisnik.VratiKorisnika(new Korisnik { Username = model.Username, Password = model.Password });
+                HttpContext.Session.SetInt32("korisnikid", korisnik.KorisnikId);
+                HttpContext.Session.SetString("username", korisnik.Username); //ovde definisemo da li je admin ili korisnik!!!
+                HttpContext.Session.Set("korisnik", JsonSerializer.SerializeToUtf8Bytes(korisnik)); //serijalizujemo celog korisnika
+                return RedirectToAction("Kurs", "Kurs");
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Wrong credentials!");
+                return View();
+            }
+        }
+
+        [NotLoggedIn]
+        public ActionResult Register()
+        {
+            return View("Register");
+        }
+
+        [HttpPost]
+        [NotLoggedIn]
+        public ActionResult Register(RegisterViewModel model)
+        {
+            if (uow.Korisnik.Search(k => k.Username == model.Username).Any())
+            {
+                ModelState.AddModelError(string.Empty, "Username is taken!");
+                return View();
+            }
+                uow.Korisnik.Add(new Korisnik { Ime = model.Ime, Prezime = model.Prezime, Username = model.Username, Password = model.Password, BrPoena = 0 });
+                uow.Commit();
+                return RedirectToAction("Kurs", "Kurs"); //idi na Login stranicu sad ako se uspesno registrovao
+        }
+        public ActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index");
         }
 
         // GET: KorisnikController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        /* public ActionResult Details(int id)
+         {
+             return View();
+         }*/
 
         // GET: KorisnikController/Create
+        
         public ActionResult Create()
         {
             List<Kurs> list = uow.Kurs.GetAll();
@@ -49,11 +96,14 @@ namespace WebApp.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                uow.Korisnik.Add(viewmodel.Korisnik);
+                uow.Commit();
+                return RedirectToAction("Kurs", "Kurs");
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return RedirectToAction("Create");
             }
         }
 
@@ -70,6 +120,7 @@ namespace WebApp.Controllers
             };
             return PartialView("PohadjanjePartial", model);
         }
+
 
     }
 }

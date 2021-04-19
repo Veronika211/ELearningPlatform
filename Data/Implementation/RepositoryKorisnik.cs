@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Data.Implementation
@@ -42,6 +43,11 @@ namespace Data.Implementation
         public List<Polaganje> PolaganiTestovi(Korisnik k)
         {
             throw new NotImplementedException();
+        }
+
+        public List<Korisnik> Search(Expression<Func<Korisnik, bool>> pred)
+        {
+            return context.Korisnici.Where(pred).ToList();
         }
 
         public Korisnik VratiKorisnika(Korisnik korisnik)

@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApp.Filters;
+using WebApp.Middleware;
 
 namespace WebApp
 {
@@ -25,8 +27,15 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedMemoryCache(); //da vodi evidenciju o servisima/sesijama
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
+            }); //posle 60 min ga odjavljuje
             services.AddControllersWithViews();
             //ako nekad hocu da koristim neki drugi uow, samo promenim drugi parametar i sve radi
+            services.AddScoped<LoggedInKorisnik>();
+            services.AddScoped<NotLoggedIn>();
             services.AddScoped<IUnitOfWork, UnitOfWorkImplementation>();
             services.AddDbContext<Context>();
         }
@@ -48,6 +57,9 @@ namespace WebApp
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession(); //bitno je da ovo ide prvo a ovo sledece drugo da ne baca exception da nije postavljena sesija
+            //app.UseCheckIfKorisnikIsLoggedInMiddleware();
+            
 
             app.UseAuthorization();
 
@@ -55,7 +67,7 @@ namespace WebApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Kurs}/{action=Kurs}/{id?}");
+                    pattern: "{controller=Korisnik}/{action=Index}/{id?}");
             });
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Data.Implementation
@@ -33,6 +34,11 @@ namespace Data.Implementation
         public List<Test> GetAll()
         {
             return context.Testovi.ToList();
+        }
+
+        public List<Test> Search(Expression<Func<Test, bool>> pred)
+        {
+            throw new NotImplementedException();
         }
     }
 }

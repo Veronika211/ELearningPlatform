@@ -7,10 +7,12 @@ using Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using WebApp.Filters;
 using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [LoggedInKorisnik] //ovo znaci valjda da svemu moze da pristupi korisnik samo koji je prijavljen
     public class TestController : Controller
     {
         private readonly IUnitOfWork uow;
