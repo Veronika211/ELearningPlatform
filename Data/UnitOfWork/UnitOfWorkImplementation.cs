@@ -15,11 +15,13 @@ namespace Data.UnitOfWork
             Kurs = new RepositoryKurs(context);
             Test = new RepositoryTest(context);
             Korisnik = new RepositoryKorisnik(context);
+            Administrator = new RepositoryAdministrator(context);
         }
         public IRepositoryKurs Kurs { get; set; }
         public IRepositoryTest Test { get; set; }
         public IRepositoryKorisnik Korisnik { get; set; }
 
+        public IRepositoryAdministrator Administrator { get; set; }
         public void Commit()
         {
             context.SaveChanges();

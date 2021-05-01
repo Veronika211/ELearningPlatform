@@ -10,16 +10,20 @@
             <th>Redni broj</th>
             <th>Naziv kursa</th>
             <th>Detalji</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
             @foreach (Kurs k in Model)
             {
-            <tr>
-                <td>@k.KursId</td>
-                <td>@k.NazivKursa</td>
-                <td>@Html.ActionLink("Detalji","Details","Kurs", new { id = k.KursId})</td>
-            </tr>
+        <tr>
+            <td>@k.KursId</td>
+            <td>@k.NazivKursa</td>
+            <td>@Html.ActionLink("Detalji", "Details", "Kurs", new { id = k.KursId })</td>
+            <td>@Html.ActionLink("Edit", "Edit", "Kurs", new { id = k.KursId })</td>
+            <td>@Html.ActionLink("Delete", "Delete", "Kurs", new { id = k.KursId })</td>
+        </tr>
             }
         </tbody>
 </table>

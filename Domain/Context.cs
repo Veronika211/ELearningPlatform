@@ -46,7 +46,7 @@ namespace Domain
                );
 
             modelBuilder.Entity<Test>().HasKey(tid => new { tid.TestId, tid.KursId });
-            modelBuilder.Entity<Test>().HasMany(t => t.Pitanja);
+            modelBuilder.Entity<Test>().HasMany(t => t.Pitanja); //veza jedan vise
             modelBuilder.Entity<Kurs>().OwnsMany(k => k.Lekcije);
             modelBuilder.Entity<Korisnik>().HasData(new { KorisnikId = 1, Ime = "Aleksandra", Prezime = "Markovic", Username = "am", Password = "am", BrPoena = 0 },
                                                     new { KorisnikId = 2, Ime = "Veronika", Prezime = "Markovic", Username = "vm", Password = "vm", BrPoena = 0 });

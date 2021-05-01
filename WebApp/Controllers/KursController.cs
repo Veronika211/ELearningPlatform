@@ -11,7 +11,7 @@ using WebApp.Filters;
 
 namespace WebApp.Controllers
 {
-    [LoggedInKorisnik]
+    
     public class KursController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -20,23 +20,47 @@ namespace WebApp.Controllers
             this.unitOfWork = unitOfWork;
         }
         //samo ovoj metodi moze da pristupi neko ko nije trenutno prijavljen
-        
+
         public ActionResult Kurs()
         {
             List<Kurs> model = unitOfWork.Kurs.GetAll();
             int? korisnikid = HttpContext.Session.GetInt32("korisnikid"); //vraca null ako ne postoji, zato ?
-            Console.WriteLine(korisnikid);
+            int? administratorid = HttpContext.Session.GetInt32("administratorid");
             if (korisnikid != null)
             {
-                ViewBag.IsLoggedIn = true;
+                ViewBag.IsLoggedInKorisnik = true;
                 ViewBag.Username = HttpContext.Session.GetString("username");
                 byte[] korisnikBy = HttpContext.Session.Get("korisnik");
                 Korisnik korisnik = JsonSerializer.Deserialize<Korisnik>(korisnikBy); //ovako isto mozemo proveriti da li je admin ili korisnik
             }
+            else if (administratorid != null)
+            {
+                ViewBag.IsLoggedInAdministrator = true;
+                ViewBag.Username = HttpContext.Session.GetString("username");
+                byte[] adminBy = HttpContext.Session.Get("administrator");
+                Administrator administrator = JsonSerializer.Deserialize<Administrator>(adminBy); //ovako isto mozemo proveriti da li je admin ili korisnik
+            }
             else return RedirectToAction("Index", "Korisnik");
             return View("Kurs", model);
         }
-        [NotLoggedIn]
+
+        
+        public ActionResult Delete(int id)
+        {
+            Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
+            unitOfWork.Kurs.Delete(model);
+            unitOfWork.Commit();
+            return RedirectToAction("Kurs","Kurs");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
+            unitOfWork.Kurs.Update(model);
+            unitOfWork.Commit();
+            return RedirectToAction("Kurs", "Kurs");
+        }
+
         public ActionResult Details([FromRoute(Name="id")] int id)
         {
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
@@ -50,7 +74,9 @@ namespace WebApp.Controllers
         }
         //ovako postavljamo da radi samo za http post metode, nece imati problem da prepozna sta da pozove(koji endpoint)
         [HttpPost]
-        [ValidateAntiForgeryToken] //da se metoda ne izvrsi ukoliko neko hoce da nas napadne, da se podaci sigurno unose sa nase forme
+       
+        [ValidateAntiForgeryToken]
+        //da se metoda ne izvrsi ukoliko neko hoce da nas napadne, da se podaci sigurno unose sa nase forme
         public ActionResult Create([FromForm]Kurs kurs)
         {
             if (!ModelState.IsValid)

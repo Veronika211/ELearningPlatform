@@ -127,7 +127,7 @@ namespace Domain.Migrations
                         columns: x => new { x.TestId, x.TestKursId },
                         principalTable: "Testovi",
                         principalColumns: new[] { "TestId", "KursId" },
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

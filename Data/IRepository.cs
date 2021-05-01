@@ -10,6 +10,7 @@ namespace Data
         List<T> GetAll();
         T FindById(T id);
         void Delete(T s);
+        void Update(T s);
         List<T> Search(Expression<Func<T,bool>> pred);
     }
 }

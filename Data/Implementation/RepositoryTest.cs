@@ -40,5 +40,10 @@ namespace Data.Implementation
         {
             throw new NotImplementedException();
         }
+
+        public void Update(Test s)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

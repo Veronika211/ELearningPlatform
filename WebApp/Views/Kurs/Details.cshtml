@@ -8,3 +8,14 @@
 {
     <h6>@l.Naziv</h6>
 }
+
+<div class="form-control">
+    <form method="post" asp-controller="Kurs" asp-action="Create">
+        <label>Naziv:</label>
+        <input type="text" asp-for="NazivKursa" />
+        <span asp-validation-for="NazivKursa"></span>
+        @Html.ValidationMessage("NazivKursaValidation")
+        @*  ne moze da radi onako jer nazivkursavalidation nije properti pa mora preko html taga*@
+        <input type="submit" value="Izmeni kurs" />
+    </form>
+</div>

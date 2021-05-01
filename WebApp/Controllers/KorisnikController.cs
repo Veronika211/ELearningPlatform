@@ -13,7 +13,7 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
-    [LoggedInKorisnik]
+    
     public class KorisnikController : Controller
     {
         private readonly IUnitOfWork uow;
@@ -28,19 +28,38 @@ namespace WebApp.Controllers
             return View("Login"); //ne znam treba li ovo
         }
         [HttpPost]
+        [NotLoggedIn]
         public ActionResult Login(LoginViewModel model)
         {
             try
             {
-                Korisnik korisnik = uow.Korisnik.VratiKorisnika(new Korisnik { Username = model.Username, Password = model.Password });
-                HttpContext.Session.SetInt32("korisnikid", korisnik.KorisnikId);
-                HttpContext.Session.SetString("username", korisnik.Username); //ovde definisemo da li je admin ili korisnik!!!
-                HttpContext.Session.Set("korisnik", JsonSerializer.SerializeToUtf8Bytes(korisnik)); //serijalizujemo celog korisnika
-                return RedirectToAction("Kurs", "Kurs");
+                if (model.KorisnikORAdministrator == "Korisnik")
+                {
+                    Korisnik korisnik = uow.Korisnik.VratiKorisnika(new Korisnik { Username = model.Username, Password = model.Password });
+                    if (korisnik != null)
+                    {
+                        HttpContext.Session.SetInt32("korisnikid", korisnik.KorisnikId);
+                        HttpContext.Session.SetString("username", korisnik.Username); //ovde definisemo da li je admin ili korisnik!!!
+                        HttpContext.Session.Set("korisnik", JsonSerializer.SerializeToUtf8Bytes(korisnik)); //serijalizujemo celog korisnika
+                        return RedirectToAction("Kurs", "Kurs");
+                    }
+                }
+                else if (model.KorisnikORAdministrator == "Administrator")
+                {
+                    Administrator administrator = uow.Administrator.VratiAdministratora(new Administrator { Username = model.Username, Password = model.Password });
+                    if (administrator != null)
+                    {
+                        HttpContext.Session.SetInt32("administratorid", administrator.AdministratorId);
+                        HttpContext.Session.SetString("username", administrator.Username); //ovde definisemo da li je admin ili korisnik!!!
+                        HttpContext.Session.Set("administrator", JsonSerializer.SerializeToUtf8Bytes(administrator)); //serijalizujemo celog korisnika
+                        return RedirectToAction("Kurs", "Kurs");
+                    }
+                }
+                return RedirectToAction("Index", "Korisnik");
             }
             catch(Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Wrong credentials!");
+                ModelState.AddModelError(string.Empty, "Wrong credentials!" + ex.Message);
                 return View();
             }
         }

@@ -20,8 +20,25 @@ namespace Data.Implementation
             context.Kursevi.Add(k);
         }
 
+
         public void Delete(Kurs k)
         {
+            if (k.Lekcije != null)
+            {
+                foreach (Lekcija l in k.Lekcije.ToList())
+                {
+                    k.Lekcije.Remove(l); ; //obrisi sve lekcije vezane za taj kurs
+                }
+            }
+            List<Test> testovi = context.Testovi.Where(t => t.KursId == k.KursId).ToList();//svi testovi
+            if (testovi.Count>0)
+            {
+                foreach (Test t in testovi.ToList())
+                {
+                    testovi.Remove(t);
+                }
+            }
+            //sad bi trebalo da radi xd
             context.Kursevi.Remove(k);
         }
 
@@ -40,5 +57,9 @@ namespace Data.Implementation
             return context.Kursevi.Where(k).ToList();
         }
 
+        public void Update(Kurs s)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

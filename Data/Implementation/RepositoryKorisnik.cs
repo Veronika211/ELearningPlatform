@@ -50,6 +50,11 @@ namespace Data.Implementation
             return context.Korisnici.Where(pred).ToList();
         }
 
+        public void Update(Korisnik s)
+        {
+            throw new NotImplementedException();
+        }
+
         public Korisnik VratiKorisnika(Korisnik korisnik)
         {
             return context.Korisnici.Single(k => k.Username == korisnik.Username && k.Password == korisnik.Password);
