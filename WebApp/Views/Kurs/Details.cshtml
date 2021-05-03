@@ -1,21 +1,40 @@
 ﻿@model Kurs
 
-<h3> Kurs</h3>
-<h3>Redni broj: @Model.KursId</h3>
+<h1> Kurs</h1>
+<h3>ID kursa: @Model.KursId</h3>
 <h3>Naziv: @Model.NazivKursa</h3>
-<h3>Lekcije:</h3>
-@foreach (Lekcija l in Model.Lekcije)
-{
-    <h6>@l.Naziv</h6>
-}
 
+
+<h1>Lekcije: </h1>
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>Redni broj</th>
+            <th>Naziv lekcije</th>
+            <th>Sadrzaj</th>
+            <th>Izmeni</th>
+            <th>Izbrisi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Lekcija l in Model.Lekcije)
+        {
+            <tr>
+                <td>@l.LekcijaId</td>
+                <td>@l.Naziv</td>
+                <td>@Html.ActionLink("Sadrzaj", "PrikaziSadrzaj", "Kurs", new {id=l.LekcijaId})</td>
+                <td>@Html.ActionLink("Izmeni", "Edit", "Kurs", new { id = l.LekcijaId })</td>
+                <td>@Html.ActionLink("Izbrisi", "Delete", "Kurs", new { id = l.LekcijaId })</td>
+            </tr>
+        }
+    </tbody>
+</table>
 <div class="form-control">
-    <form method="post" asp-controller="Kurs" asp-action="Create">
+    <form method="post" asp-controller="Kurs" asp-action="Edit">
         <label>Naziv:</label>
-        <input type="text" asp-for="NazivKursa" />
+        <input type="text" placeholder="Naziv kursa..." />
         <span asp-validation-for="NazivKursa"></span>
         @Html.ValidationMessage("NazivKursaValidation")
-        @*  ne moze da radi onako jer nazivkursavalidation nije properti pa mora preko html taga*@
         <input type="submit" value="Izmeni kurs" />
     </form>
 </div>

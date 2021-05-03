@@ -83,6 +83,7 @@ namespace WebApp.Controllers
                 uow.Commit();
                 return RedirectToAction("Kurs", "Kurs"); //idi na Login stranicu sad ako se uspesno registrovao
         }
+        [LoggedInAdministrator] //treba i za korisnika
         public ActionResult Logout()
         {
             HttpContext.Session.Clear();
@@ -97,6 +98,7 @@ namespace WebApp.Controllers
 
         // GET: KorisnikController/Create
         
+        [LoggedInAdministrator]
         public ActionResult Create()
         {
             List<Kurs> list = uow.Kurs.GetAll();
@@ -111,6 +113,7 @@ namespace WebApp.Controllers
         // POST: KorisnikController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        
         public ActionResult Create(CreateKorisnikViewModel viewmodel)
         {
             try

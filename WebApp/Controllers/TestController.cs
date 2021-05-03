@@ -12,7 +12,7 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
-    [LoggedInKorisnik] //ovo znaci valjda da svemu moze da pristupi korisnik samo koji je prijavljen
+    [LoggedInAdministrator] //ovo znaci valjda da svemu moze da pristupi korisnik samo koji je prijavljen
     public class TestController : Controller
     {
         private readonly IUnitOfWork uow;
@@ -23,12 +23,14 @@ namespace WebApp.Controllers
         }
         public ActionResult Index()
         {
+            ViewBag.IsLoggedInAdministrator = true;
             return View(uow.Test.GetAll());
         }
 
         // GET: TestController/Details/5
         public ActionResult Details(int id)
         {
+            ViewBag.IsLoggedInAdministrator = true;
             return View();
         }
 
@@ -40,6 +42,7 @@ namespace WebApp.Controllers
             {
                 kursevi.Add(new SelectListItem { Value = k.KursId.ToString(), Text = k.NazivKursa });
             }
+            ViewBag.IsLoggedInAdministrator = true;
             ViewData["Kursevi"] = kursevi;
             ViewModel model = new ViewModel { Kursevi = kursevi };
             return View(model);
@@ -50,6 +53,7 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([FromForm]ViewModel test)
         {
+            ViewBag.IsLoggedInAdministrator = true;
             try
             {
                 Test t = new Test
@@ -69,8 +73,10 @@ namespace WebApp.Controllers
         }
 
         // GET: TestController/Edit/5
+        [LoggedInAdministrator]
         public ActionResult Edit(int id)
         {
+            ViewBag.IsLoggedInAdministrator = true;
             return View();
         }
 
@@ -79,6 +85,7 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
+            ViewBag.IsLoggedInAdministrator = true;
             try
             {
                 return RedirectToAction(nameof(Index));
@@ -92,6 +99,7 @@ namespace WebApp.Controllers
         // GET: TestController/Delete/5
         public ActionResult Delete(int id)
         {
+            ViewBag.IsLoggedInAdministrator = true;
             return View();
         }
 
@@ -100,6 +108,7 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
+            ViewBag.IsLoggedInAdministrator = true;
             try
             {
                 return RedirectToAction(nameof(Index));

@@ -19,8 +19,7 @@ namespace WebApp.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
-        //samo ovoj metodi moze da pristupi neko ko nije trenutno prijavljen
-
+       [LoggedInAdministrator] //treba i korisnik da vidi
         public ActionResult Kurs()
         {
             List<Kurs> model = unitOfWork.Kurs.GetAll();
@@ -44,7 +43,7 @@ namespace WebApp.Controllers
             return View("Kurs", model);
         }
 
-        
+        [LoggedInAdministrator]
         public ActionResult Delete(int id)
         {
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
@@ -53,6 +52,29 @@ namespace WebApp.Controllers
             return RedirectToAction("Kurs","Kurs");
         }
 
+        [LoggedInAdministrator] //treba da i korisnik moze da procita
+        public ActionResult PrikaziSadrzaj([FromRoute(Name ="id")] int lekcijaId)
+        {
+            Lekcija l = new Lekcija { LekcijaId = lekcijaId }; //nadji kurs koji ima lekciju sa ovim Id-em
+            List<Kurs> kursevi = unitOfWork.Kurs.GetAll();
+            Lekcija nova = new Lekcija();
+            foreach(Kurs k in kursevi)
+            {
+                nova = k.Lekcije.Single(lek => lek.LekcijaId == l.LekcijaId); //nadjem lekciju
+                if (nova != null)
+                {
+                    break;
+                }
+            }
+            HttpContext.Session.SetString("id", lekcijaId.ToString());
+            HttpContext.Session.SetString("sadrzaj", nova.Sadrzaj);
+            HttpContext.Session.SetString("naziv", nova.Naziv);
+            ViewBag.Sadrzaj = HttpContext.Session.GetString("sadrzaj");
+            ViewBag.Id = HttpContext.Session.GetString("id");
+            ViewBag.Naziv = HttpContext.Session.GetString("naziv");
+            return View("SadrzajLekcije");
+        }
+        [LoggedInAdministrator] //proveri mislim da ovo nije implementirano nikako
         public ActionResult Edit(int id)
         {
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
@@ -61,13 +83,15 @@ namespace WebApp.Controllers
             return RedirectToAction("Kurs", "Kurs");
         }
 
+        [LoggedInAdministrator]
         public ActionResult Details([FromRoute(Name="id")] int id)
         {
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
             return View(model);
         }
-
+        
         [HttpGet]
+        [LoggedInAdministrator]
         public ActionResult Create()
         {
             return View("CreateKurs");
@@ -76,6 +100,7 @@ namespace WebApp.Controllers
         [HttpPost]
        
         [ValidateAntiForgeryToken]
+        [LoggedInAdministrator]
         //da se metoda ne izvrsi ukoliko neko hoce da nas napadne, da se podaci sigurno unose sa nase forme
         public ActionResult Create([FromForm]Kurs kurs)
         {

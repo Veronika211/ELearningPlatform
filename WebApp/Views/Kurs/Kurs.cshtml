@@ -2,7 +2,9 @@
 @{ 
     ViewData["Title"] = "Kursevi";
 }
-
+<form method="post" asp-controller="Kurs" asp-action="Create">
+    <input type="submit" value="Dodaj novi" asp-controller="Kurs" asp-action="Create" />
+</form>
 <h1>Kursevi: @ViewBag.Username</h1>
 <table class="table table-hover">
     <thead class="thead-dark">

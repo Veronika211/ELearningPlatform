@@ -44,7 +44,7 @@ namespace Data.Implementation
 
         public Kurs FindById(Kurs kurs)
         {
-            return context.Kursevi.Single(k => k.KursId == kurs.KursId);
+            return context.Kursevi.SingleOrDefault(k => k.KursId == kurs.KursId);
         }
 
         public List<Kurs> GetAll()
