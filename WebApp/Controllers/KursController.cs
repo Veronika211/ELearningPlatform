@@ -19,7 +19,7 @@ namespace WebApp.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
-       [LoggedInAdministrator] //treba i korisnik da vidi
+       [LoggedInBoth] //treba i korisnik da vidi
         public ActionResult Kurs()
         {
             List<Kurs> model = unitOfWork.Kurs.GetAll();
@@ -39,7 +39,10 @@ namespace WebApp.Controllers
                 byte[] adminBy = HttpContext.Session.Get("administrator");
                 Administrator administrator = JsonSerializer.Deserialize<Administrator>(adminBy); //ovako isto mozemo proveriti da li je admin ili korisnik
             }
-            else return RedirectToAction("Index", "Korisnik");
+            else
+            {
+                return RedirectToAction("Index", "Korisnik");
+            }
             return View("Kurs", model);
         }
 
@@ -52,7 +55,7 @@ namespace WebApp.Controllers
             return RedirectToAction("Kurs","Kurs");
         }
 
-        [LoggedInAdministrator] //treba da i korisnik moze da procita
+        [LoggedInBoth] //treba da i korisnik moze da procita
         public ActionResult PrikaziSadrzaj([FromRoute(Name ="id")] int lekcijaId)
         {
             Lekcija l = new Lekcija { LekcijaId = lekcijaId }; //nadji kurs koji ima lekciju sa ovim Id-em
@@ -83,7 +86,7 @@ namespace WebApp.Controllers
             return RedirectToAction("Kurs", "Kurs");
         }
 
-        [LoggedInAdministrator]
+        [LoggedInBoth]
         public ActionResult Details([FromRoute(Name="id")] int id)
         {
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });

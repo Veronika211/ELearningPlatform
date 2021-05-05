@@ -55,7 +55,11 @@ namespace WebApp.Controllers
                         return RedirectToAction("Kurs", "Kurs");
                     }
                 }
-                return RedirectToAction("Index", "Korisnik");
+                else if(model.KorisnikORAdministrator==null)
+                    ModelState.AddModelError("KorisnikORAdministrator", "Cekirajte opciju Korisnik/Administrator!!!");
+                return View(model);
+                
+                
             }
             catch(Exception ex)
             {
@@ -98,9 +102,10 @@ namespace WebApp.Controllers
 
         // GET: KorisnikController/Create
         
-        [LoggedInAdministrator]
+        [LoggedInKorisnik]
         public ActionResult Create()
         {
+            ViewBag.IsLoggedInKorisnik = true;
             List<Kurs> list = uow.Kurs.GetAll();
             List<SelectListItem> selectList = list.Select(k => new SelectListItem { Text = k.NazivKursa, Value = k.KursId.ToString()}).ToList();
             CreateKorisnikViewModel model = new CreateKorisnikViewModel
@@ -113,9 +118,10 @@ namespace WebApp.Controllers
         // POST: KorisnikController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
+        [LoggedInKorisnik]
         public ActionResult Create(CreateKorisnikViewModel viewmodel)
         {
+            ViewBag.IsLoggedInKorisnik = true;
             try
             {
                 uow.Korisnik.Add(viewmodel.Korisnik);
@@ -130,8 +136,10 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
+        [LoggedInKorisnik]
         public ActionResult AddPohadjanje(PohadjanjeViewModel request)
         {
+            ViewBag.IsLoggedInKorisnik = true;
             Console.WriteLine(request.RedniBroj);
             string naziv = uow.Kurs.FindById(new Kurs { KursId = request.KursId }).NazivKursa;
             PohadjanjeViewModel model = new PohadjanjeViewModel

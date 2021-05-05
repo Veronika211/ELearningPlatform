@@ -18,7 +18,7 @@
                 <input asp-for="Password" class="form-control" type="password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-           @* //novo*@
+            @* //novo*@
             <div class="form-group">
                 @Html.LabelFor(model => model.KorisnikORAdministrator, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -28,6 +28,7 @@
                     @Html.RadioButtonFor(model => model.KorisnikORAdministrator, "Administrator")
                 </div>
             </div>
+            @Html.ValidationMessageFor(m => m.KorisnikORAdministrator)
             <div class="form-group">
                 <input type="submit" value="Login" class="btn btn-primary" />
             </div>

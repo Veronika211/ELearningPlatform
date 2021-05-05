@@ -12,7 +12,7 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
-    [LoggedInAdministrator] //ovo znaci valjda da svemu moze da pristupi korisnik samo koji je prijavljen
+    [LoggedInBoth] //ovo znaci valjda da svemu moze da pristupi korisnik samo koji je prijavljen
     public class TestController : Controller
     {
         private readonly IUnitOfWork uow;
@@ -23,7 +23,14 @@ namespace WebApp.Controllers
         }
         public ActionResult Index()
         {
-            ViewBag.IsLoggedInAdministrator = true;
+            int? korisnikid = HttpContext.Session.GetInt32("korisnikid"); //vraca null ako ne postoji, zato ?
+            int? administratorid = HttpContext.Session.GetInt32("administratorid");
+            if (korisnikid != null)
+            {
+                ViewBag.IsLoggedInKorisnik = true;
+            }
+            if(administratorid!=null)
+                ViewBag.IsLoggedInAdministrator = true;
             return View(uow.Test.GetAll());
         }
 
