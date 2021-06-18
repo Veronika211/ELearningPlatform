@@ -36,24 +36,16 @@ namespace WebApp.Controllers
         }
 
         // GET: TestController/Details/5
-        public ActionResult Details([FromRoute(Name = "id")] int? id)
+        public ActionResult Details([FromRoute(Name = "id")] int id, TestsViewModel tvm)
         {
-            /* ViewBag.IsLoggedInAdministrator = true;
-             TestsViewModel tvm = new TestsViewModel();
-             tvm.Testovi = uow.Test.GetAll();//ovo moram izmeniti da budu samo testovi tog kursa
-             //mozda ih treba u funkciji za kurseve zapamtiti
-             if (id != null)
-             {
-
-                 tvm.Pitanja = tvm.Testovi.Where(
-                     t => t.TestId == id).Single().Pitanja; //ovako bih mogla da pristupim pitanjima testa
-                 //da ona nisu null hahaha
-                 //treba da vidim kako da pristupim atributu test id iz baze koji ne postoji kao property
-
-             }*/
-            List<Pitanje> pitanja = uow.Pitanje.GetAll();
-            List<Checkbox> checkboxes = pitanja.OfType<Checkbox>().ToList();
-            return View();
+             ViewBag.IsLoggedInAdministrator = true;
+            tvm.TestId = id;
+            List<Pitanje> pitanja = uow.Pitanje.GetAll().Where(p => p.TestId == tvm.TestId).ToList();
+;           List<Checkbox> checkboxes = pitanja.OfType<Checkbox>().ToList();
+            List<Dopuna> dopune = pitanja.OfType<Dopuna>().ToList();
+            tvm.Checkboxes = checkboxes;
+            tvm.Dopune = dopune;
+            return View(tvm);
         }
 
             // GET: TestController/Create
@@ -73,9 +65,14 @@ namespace WebApp.Controllers
         // POST: TestController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggedInAdministrator]
         public ActionResult Create([FromForm]ViewModel test)
         {
             ViewBag.IsLoggedInAdministrator = true;
+            if (!ModelState.IsValid)
+            {
+                return View("Create");
+            }
             try
             {
                 Test t = new Test
@@ -93,6 +90,7 @@ namespace WebApp.Controllers
                 return View();
             }
         }
+
 
         // GET: TestController/Edit/5
         [LoggedInAdministrator]
@@ -128,6 +126,17 @@ namespace WebApp.Controllers
             return View();
         }
 
+        public ActionResult IzbrisiPitanje([FromRoute(Name = "id")] int id, TestsViewModel tvm)
+        {
+            ViewBag.IsLoggedInAdministrator = true;
+            Pitanje model = uow.Pitanje.FindById(new Pitanje { PitanjeId = id });
+            uow.Pitanje.Delete(model);
+            uow.Commit();
+            return RedirectToAction("Index", "Test");
+        }
+
+
+
         // POST: TestController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -143,6 +152,8 @@ namespace WebApp.Controllers
                 return View();
             }
         }
+
+        
 
        
     }

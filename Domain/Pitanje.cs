@@ -9,5 +9,7 @@ namespace Domain
     {
         public int PitanjeId { get; set; }
         public string Naziv { get; set; }
+        //ovo mozda napravi problem?
+        public int TestId { get; set; }
     }
 }
