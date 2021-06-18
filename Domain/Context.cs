@@ -24,7 +24,7 @@ namespace Domain
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLoggerFactory(loggerFactory).EnableSensitiveDataLogging().UseSqlServer(@"Server=(localdb)\mssqllocaldb; 
-            Database=ELearning;");
+            Database=ELearning2;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -45,7 +45,8 @@ namespace Domain
                }
                );
 
-            modelBuilder.Entity<Test>().HasKey(tid => new { tid.TestId, tid.KursId });
+            modelBuilder.Entity<Test>().HasKey(tid => new { tid.TestId });
+            modelBuilder.Entity<Test>().HasOne(t => t.Kurs);
             modelBuilder.Entity<Test>().HasMany(t => t.Pitanja); //veza jedan vise
             modelBuilder.Entity<Kurs>().OwnsMany(k => k.Lekcije);
             modelBuilder.Entity<Korisnik>().HasData(new { KorisnikId = 1, Ime = "Aleksandra", Prezime = "Markovic", Username = "am", Password = "am", BrPoena = 0 },
@@ -76,7 +77,7 @@ namespace Domain
                                                 new { TestId = 10, KursId = 4, Nivo = "I" },
                                                 new { TestId = 11, KursId = 4, Nivo = "II" },
                                                 new { TestId = 12, KursId = 4, Nivo = "III" });
-         
+
             modelBuilder.Entity<Checkbox>().HasData(new
             {
                 PitanjeId = 1,
@@ -129,7 +130,7 @@ namespace Domain
                 NetacanOdgovor2 = "Output Caching,Fragment Caching,Type Caching",
                 NetacanOdgovor3 = "In Caching,Fragment Caching,Data Caching"
             });
-            modelBuilder.Entity<Administrator>().HasData(new { AdministratorId = 1, Ime = "Tatjana", Prezime = "Stojanovic", Username = "ts", Password = "ts"});
+            modelBuilder.Entity<Administrator>().HasData(new { AdministratorId = 1, Ime = "Tatjana", Prezime = "Stojanovic", Username = "ts", Password = "ts" });
         }
     }
 }

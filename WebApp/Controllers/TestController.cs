@@ -21,7 +21,7 @@ namespace WebApp.Controllers
         {
             this.uow = uow;
         }
-        public ActionResult Index()
+        public ActionResult Index(TestsViewModel tvm)
         {
             int? korisnikid = HttpContext.Session.GetInt32("korisnikid"); //vraca null ako ne postoji, zato ?
             int? administratorid = HttpContext.Session.GetInt32("administratorid");
@@ -31,18 +31,33 @@ namespace WebApp.Controllers
             }
             if(administratorid!=null)
                 ViewBag.IsLoggedInAdministrator = true;
-            return View(uow.Test.GetAll());
+            tvm.Testovi = uow.Test.GetAll(); //definisala sam sta su testovi
+            return View(tvm);
         }
 
         // GET: TestController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details([FromRoute(Name = "id")] int? id)
         {
-            ViewBag.IsLoggedInAdministrator = true;
+            /* ViewBag.IsLoggedInAdministrator = true;
+             TestsViewModel tvm = new TestsViewModel();
+             tvm.Testovi = uow.Test.GetAll();//ovo moram izmeniti da budu samo testovi tog kursa
+             //mozda ih treba u funkciji za kurseve zapamtiti
+             if (id != null)
+             {
+
+                 tvm.Pitanja = tvm.Testovi.Where(
+                     t => t.TestId == id).Single().Pitanja; //ovako bih mogla da pristupim pitanjima testa
+                 //da ona nisu null hahaha
+                 //treba da vidim kako da pristupim atributu test id iz baze koji ne postoji kao property
+
+             }*/
+            List<Pitanje> pitanja = uow.Pitanje.GetAll();
+            List<Checkbox> checkboxes = pitanja.OfType<Checkbox>().ToList();
             return View();
         }
 
-        // GET: TestController/Create
-        public ActionResult Create(int id)
+            // GET: TestController/Create
+            public ActionResult Create(int id)
         {
             List<SelectListItem> kursevi = new List<SelectListItem>();
             foreach(Kurs k in uow.Kurs.GetAll())
@@ -104,9 +119,12 @@ namespace WebApp.Controllers
         }
 
         // GET: TestController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete([FromRoute (Name ="id")]int id)
         {
             ViewBag.IsLoggedInAdministrator = true;
+            Test model = uow.Test.FindById(new Test { TestId = id });
+            uow.Test.Delete(model);
+            uow.Commit();
             return View();
         }
 
@@ -125,5 +143,7 @@ namespace WebApp.Controllers
                 return View();
             }
         }
+
+       
     }
 }

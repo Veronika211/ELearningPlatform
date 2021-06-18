@@ -108,6 +108,7 @@ namespace Domain.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("NazivKursa")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("KursId");
@@ -154,12 +155,9 @@ namespace Domain.Migrations
                     b.Property<int?>("TestId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TestKursId")
-                        .HasColumnType("int");
-
                     b.HasKey("PitanjeId");
 
-                    b.HasIndex("TestId", "TestKursId");
+                    b.HasIndex("TestId");
 
                     b.ToTable("Pitanja");
 
@@ -200,14 +198,11 @@ namespace Domain.Migrations
                     b.Property<int?>("TestId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TestKursId")
-                        .HasColumnType("int");
-
                     b.HasKey("PolaganjeId");
 
                     b.HasIndex("KorisnikId");
 
-                    b.HasIndex("TestId", "TestKursId");
+                    b.HasIndex("TestId");
 
                     b.ToTable("Polaganje");
                 });
@@ -215,7 +210,9 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.Test", b =>
                 {
                     b.Property<int>("TestId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("KursId")
                         .HasColumnType("int");
@@ -223,7 +220,7 @@ namespace Domain.Migrations
                     b.Property<string>("Nivo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TestId", "KursId");
+                    b.HasKey("TestId");
 
                     b.HasIndex("KursId");
 
@@ -332,7 +329,6 @@ namespace Domain.Migrations
                             Discriminator = "Checkbox",
                             Naziv = "Koja su cetiri osnovna principa OOP?",
                             TestId = 4,
-                            TestKursId = 2,
                             NetacanOdgovor1 = "Nasledjivanje, modularnost, apstrakcija, enkapsulacija",
                             NetacanOdgovor2 = "Nasledjivanje, modularnost, asocijacija, enkapsulacija",
                             NetacanOdgovor3 = "Klasifikacija, modularnost, apstrakcija, enkapsulacija",
@@ -345,7 +341,6 @@ namespace Domain.Migrations
                             Discriminator = "Checkbox",
                             Naziv = "Arhitektura informacionih sistema je?",
                             TestId = 7,
-                            TestKursId = 3,
                             NetacanOdgovor1 = "Dvonivojska",
                             NetacanOdgovor2 = "Sestonivojska",
                             NetacanOdgovor3 = "Petonivojska",
@@ -358,7 +353,6 @@ namespace Domain.Migrations
                             Discriminator = "Dopuna",
                             Naziv = "Navedite validator u ASP.NET-u koji se koristi kako bismo se uverili da se vrednosti u dve razlicite kontrole podudaraju",
                             TestId = 2,
-                            TestKursId = 1,
                             TacanBodovi = 10,
                             TacanOdgovor = "Compare Validator control"
                         },
@@ -368,7 +362,6 @@ namespace Domain.Migrations
                             Discriminator = "Checkbox",
                             Naziv = "Navedite tri vrste caching-a u ASP.NET-u",
                             TestId = 3,
-                            TestKursId = 1,
                             NetacanOdgovor1 = "Output Caching,In Caching,Data Caching",
                             NetacanOdgovor2 = "Output Caching,Fragment Caching,Type Caching",
                             NetacanOdgovor3 = "In Caching,Fragment Caching,Data Caching",
@@ -479,7 +472,7 @@ namespace Domain.Migrations
                 {
                     b.HasOne("Domain.Test", null)
                         .WithMany("Pitanja")
-                        .HasForeignKey("TestId", "TestKursId");
+                        .HasForeignKey("TestId");
                 });
 
             modelBuilder.Entity("Domain.Pohadjanje", b =>
@@ -507,13 +500,13 @@ namespace Domain.Migrations
 
                     b.HasOne("Domain.Test", "Test")
                         .WithMany("Korisnici")
-                        .HasForeignKey("TestId", "TestKursId");
+                        .HasForeignKey("TestId");
                 });
 
             modelBuilder.Entity("Domain.Test", b =>
                 {
                     b.HasOne("Domain.Kurs", "Kurs")
-                        .WithMany()
+                        .WithMany("Testovi")
                         .HasForeignKey("KursId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

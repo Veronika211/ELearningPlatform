@@ -23,8 +23,8 @@
                 <td>@l.LekcijaId</td>
                 <td>@l.Naziv</td>
                 <td>@Html.ActionLink("Sadrzaj", "PrikaziSadrzaj", "Kurs", new {id=l.LekcijaId})</td>
-                <td>@Html.ActionLink("Izmeni", "Edit", "Kurs", new { id = l.LekcijaId })</td>
-                <td>@Html.ActionLink("Izbrisi", "Delete", "Kurs", new { id = l.LekcijaId })</td>
+                <td>@Html.ActionLink("Izmeni", "IzmenaLekcije", "Kurs", new { id = l.LekcijaId })</td>
+                <td>@Html.ActionLink("Izbrisi", "IzbrisiLekciju", "Kurs", new { id = l.LekcijaId, kursId=Model.KursId })</td>
             </tr>
         }
     </tbody>

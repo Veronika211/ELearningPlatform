@@ -54,6 +54,15 @@ namespace WebApp.Controllers
             unitOfWork.Commit();
             return RedirectToAction("Kurs","Kurs");
         }
+        [LoggedInAdministrator]
+        public ActionResult IzbrisiLekciju([FromRoute(Name ="id")]int idLekcije, int kursId)
+        {
+            Kurs kurs = unitOfWork.Kurs.FindById(new Kurs { KursId = kursId });
+            Lekcija model = kurs.Lekcije.FirstOrDefault(l => l.LekcijaId == idLekcije);
+            kurs.Lekcije.Remove(model);
+            unitOfWork.Commit();
+            return RedirectToAction("Kurs", "Kurs");
+        }
 
         [LoggedInBoth] //treba da i korisnik moze da procita
         public ActionResult PrikaziSadrzaj([FromRoute(Name ="id")] int lekcijaId)
@@ -90,7 +99,7 @@ namespace WebApp.Controllers
         public ActionResult Details([FromRoute(Name="id")] int id)
         {
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
-            return View(model);
+            return View(model); //ovo je kurs i za njega prikazi ono sto se trazi u View-u
         }
         
         [HttpGet]
@@ -107,6 +116,7 @@ namespace WebApp.Controllers
         //da se metoda ne izvrsi ukoliko neko hoce da nas napadne, da se podaci sigurno unose sa nase forme
         public ActionResult Create([FromForm]Kurs kurs)
         {
+            ViewBag.IsLoggedInAdministrator = true;
             if (!ModelState.IsValid)
             {
                 return View("CreateKurs");

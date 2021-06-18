@@ -42,6 +42,7 @@ namespace Data.Implementation
             context.Kursevi.Remove(k);
         }
 
+
         public Kurs FindById(Kurs kurs)
         {
             return context.Kursevi.SingleOrDefault(k => k.KursId == kurs.KursId);

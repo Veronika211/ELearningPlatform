@@ -10,6 +10,8 @@ namespace Data.UnitOfWork
         public IRepositoryTest Test { get; set; }
         public IRepositoryKorisnik Korisnik { get; set; }
         public IRepositoryAdministrator Administrator { get; set; }
+        public IRepositoryPitanje Pitanje { get; set; }
+
         void Commit();
     }
 }

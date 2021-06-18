@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Domain.Test>
+﻿@model WebApp.Models.TestsViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -13,33 +13,33 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TestId)
+               TestId
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.KursId)
+               KursId
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nivo)
+                Nivo
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (Test t in Model.Testovi) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.TestId)
+                @Html.DisplayFor(modelItem => t.TestId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.KursId)
+                @Html.DisplayFor(modelItem => t.KursId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Nivo)
+                @Html.DisplayFor(modelItem => t.Nivo)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.TestId}) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { id=t.TestId}) |
+                @Html.ActionLink("Details", "Details", "Test", new {id=t.TestId}, null) |
+                @Html.ActionLink("Delete", "Delete", new { id = t.TestId })
             </td>
         </tr>
 }

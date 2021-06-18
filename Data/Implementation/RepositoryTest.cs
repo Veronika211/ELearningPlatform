@@ -23,13 +23,17 @@ namespace Data.Implementation
 
         public void Delete(Test t)
         {
-            context.Testovi.Remove(t);
+            foreach(Pitanje p in t.Pitanja)
+            {
+                context.Pitanja.Remove(p); //obrisati prvo sva povezana pitanja
+            }
+            context.Testovi.Remove(t); //obrisati test iz tabele
         }
 
         public Test FindById(Test test)
         {
-            return context.Testovi.Include(t => t.Kurs).Single(t => t.TestId == test.TestId && t.KursId == test.KursId);
-        }
+            return context.Testovi.SingleOrDefault(t => t.TestId == test.TestId);
+        } //nalazim pomocu test id-a i kurs id-a
 
         public List<Test> GetAll()
         {

@@ -1,0 +1,8 @@
+﻿@model WebApp.Models.TestsViewModel
+
+@foreach(Pitanje p in Model.Pitanja)
+{
+    <p>@p.PitanjeId</p>
+    <p>@p.Naziv</p>
+}
+

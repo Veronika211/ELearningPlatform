@@ -7,6 +7,22 @@ namespace Domain.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Administratori",
+                columns: table => new
+                {
+                    AdministratorId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Ime = table.Column<string>(nullable: true),
+                    Prezime = table.Column<string>(nullable: true),
+                    Username = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Administratori", x => x.AdministratorId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Korisnici",
                 columns: table => new
                 {
@@ -29,7 +45,7 @@ namespace Domain.Migrations
                 {
                     KursId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NazivKursa = table.Column<string>(nullable: true)
+                    NazivKursa = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,13 +102,14 @@ namespace Domain.Migrations
                 name: "Testovi",
                 columns: table => new
                 {
-                    TestId = table.Column<int>(nullable: false),
+                    TestId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     KursId = table.Column<int>(nullable: false),
                     Nivo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Testovi", x => new { x.TestId, x.KursId });
+                    table.PrimaryKey("PK_Testovi", x => x.TestId);
                     table.ForeignKey(
                         name: "FK_Testovi_Kursevi_KursId",
                         column: x => x.KursId,
@@ -110,7 +127,6 @@ namespace Domain.Migrations
                     Naziv = table.Column<string>(nullable: true),
                     Discriminator = table.Column<string>(nullable: false),
                     TestId = table.Column<int>(nullable: true),
-                    TestKursId = table.Column<int>(nullable: true),
                     TacanOdgovor = table.Column<string>(nullable: true),
                     TacanBodovi = table.Column<int>(nullable: true),
                     NetacanOdgovor1 = table.Column<string>(nullable: true),
@@ -123,26 +139,26 @@ namespace Domain.Migrations
                 {
                     table.PrimaryKey("PK_Pitanja", x => x.PitanjeId);
                     table.ForeignKey(
-                        name: "FK_Pitanja_Testovi_TestId_TestKursId",
-                        columns: x => new { x.TestId, x.TestKursId },
+                        name: "FK_Pitanja_Testovi_TestId",
+                        column: x => x.TestId,
                         principalTable: "Testovi",
-                        principalColumns: new[] { "TestId", "KursId" },
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "TestId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Polaganje",
                 columns: table => new
                 {
+                    PolaganjeId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     KorisnikId = table.Column<int>(nullable: false),
-                    TestId = table.Column<int>(nullable: false),
-                    TestId1 = table.Column<int>(nullable: false),
-                    TestKursId = table.Column<int>(nullable: false),
+                    TestId = table.Column<int>(nullable: true),
                     BodoviT = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Polaganje", x => new { x.KorisnikId, x.TestId });
+                    table.PrimaryKey("PK_Polaganje", x => x.PolaganjeId);
                     table.ForeignKey(
                         name: "FK_Polaganje_Korisnici_KorisnikId",
                         column: x => x.KorisnikId,
@@ -150,17 +166,88 @@ namespace Domain.Migrations
                         principalColumn: "KorisnikId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Polaganje_Testovi_TestId1_TestKursId",
-                        columns: x => new { x.TestId1, x.TestKursId },
+                        name: "FK_Polaganje_Testovi_TestId",
+                        column: x => x.TestId,
                         principalTable: "Testovi",
-                        principalColumns: new[] { "TestId", "KursId" },
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "TestId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Administratori",
+                columns: new[] { "AdministratorId", "Ime", "Password", "Prezime", "Username" },
+                values: new object[] { 1, "Tatjana", "ts", "Stojanovic", "ts" });
+
+            migrationBuilder.InsertData(
+                table: "Korisnici",
+                columns: new[] { "KorisnikId", "BrPoena", "Ime", "Password", "Prezime", "Username" },
+                values: new object[,]
+                {
+                    { 1, 0, "Aleksandra", "am", "Markovic", "am" },
+                    { 2, 0, "Veronika", "vm", "Markovic", "vm" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Kursevi",
+                columns: new[] { "KursId", "NazivKursa" },
+                values: new object[,]
+                {
+                    { 1, "Napredne .NET tehnologije" },
+                    { 2, "Napredna Java" },
+                    { 3, "Projektovanje informacionih sistema" },
+                    { 4, "Osnove teorije igara" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Lekcija",
+                columns: new[] { "KursId", "LekcijaId", "Naziv", "Sadrzaj" },
+                values: new object[,]
+                {
+                    { 1, 1, "Tipovi objekata", null },
+                    { 4, 9, "Igre antikoordinacije", null },
+                    { 4, 8, "Igre koordinacije", null },
+                    { 4, 7, "Dilema zatvorenika", null },
+                    { 4, 6, "Mesovite igre", null },
+                    { 3, 4, "Tronivojska arhitektura", null },
+                    { 3, 5, "Implementacija korisnickog interfejsa", null },
+                    { 2, 3, "Osnove OOP", null },
+                    { 1, 2, "Konstruktori", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Testovi",
+                columns: new[] { "TestId", "KursId", "Nivo" },
+                values: new object[,]
+                {
+                    { 5, 2, "II" },
+                    { 6, 2, "III" },
+                    { 11, 4, "II" },
+                    { 7, 3, "I" },
+                    { 8, 3, "II" },
+                    { 9, 3, "III" },
+                    { 3, 1, "III" },
+                    { 2, 1, "II" },
+                    { 1, 1, "I" },
+                    { 10, 4, "I" },
+                    { 4, 2, "I" },
+                    { 12, 4, "III" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Pitanja",
+                columns: new[] { "PitanjeId", "Discriminator", "Naziv", "TestId", "NetacanOdgovor1", "NetacanOdgovor2", "NetacanOdgovor3", "TacanBodovi", "TacanOdgovor" },
+                values: new object[,]
+                {
+                    { 3, "Dopuna", "Navedite validator u ASP.NET-u koji se koristi kako bismo se uverili da se vrednosti u dve razlicite kontrole podudaraju", 2, null, null, null, 10, "Compare Validator control" },
+                    { 4, "Checkbox", "Navedite tri vrste caching-a u ASP.NET-u", 3, "Output Caching,In Caching,Data Caching", "Output Caching,Fragment Caching,Type Caching", "In Caching,Fragment Caching,Data Caching", 15, "Output Caching,Fragment Caching,Data Caching" },
+                    { 1, "Checkbox", "Koja su cetiri osnovna principa OOP?", 4, "Nasledjivanje, modularnost, apstrakcija, enkapsulacija", "Nasledjivanje, modularnost, asocijacija, enkapsulacija", "Klasifikacija, modularnost, apstrakcija, enkapsulacija", 5, "Nasledjivanje, modularnost, polumorfizam, enkapsulacija" },
+                    { 2, "Checkbox", "Arhitektura informacionih sistema je?", 7, "Dvonivojska", "Sestonivojska", "Petonivojska", 5, "Tronivojska" }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pitanja_TestId_TestKursId",
+                name: "IX_Pitanja_TestId",
                 table: "Pitanja",
-                columns: new[] { "TestId", "TestKursId" });
+                column: "TestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pohadjanje_KursId",
@@ -168,9 +255,14 @@ namespace Domain.Migrations
                 column: "KursId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Polaganje_TestId1_TestKursId",
+                name: "IX_Polaganje_KorisnikId",
                 table: "Polaganje",
-                columns: new[] { "TestId1", "TestKursId" });
+                column: "KorisnikId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Polaganje_TestId",
+                table: "Polaganje",
+                column: "TestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Testovi_KursId",
@@ -180,6 +272,9 @@ namespace Domain.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Administratori");
+
             migrationBuilder.DropTable(
                 name: "Lekcija");
 
