@@ -27,15 +27,20 @@ namespace Data.Implementation
             {
                 foreach (Lekcija l in k.Lekcije.ToList())
                 {
-                    k.Lekcije.Remove(l); ; //obrisi sve lekcije vezane za taj kurs
+                    k.Lekcije.Remove(l); ; //obrisi sve lekcije vezane za taj kurs, ali brise samo iz liste ostace u bazi??
+                    //trebalo bi da se izbrisu i iz baze ali ne znam kako, mozda ce samo
                 }
             }
-            List<Test> testovi = context.Testovi.Where(t => t.KursId == k.KursId).ToList();//svi testovi
-            if (testovi.Count>0)
+           
+            if (k.Testovi.Count>0)
             {
-                foreach (Test t in testovi.ToList())
+                foreach (Test t in k.Testovi)
                 {
-                    testovi.Remove(t);
+                    foreach (Pitanje p in t.Pitanja)
+                    {
+                        context.Pitanja.Remove(p); //obrisati prvo sva povezana pitanja
+                    }
+                    context.Testovi.Remove(t);//ovde izbacim iz baze
                 }
             }
             //sad bi trebalo da radi xd

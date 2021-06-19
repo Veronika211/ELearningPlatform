@@ -49,7 +49,13 @@ namespace WebApp.Controllers
         [LoggedInAdministrator]
         public ActionResult Delete(int id)
         {
+            ViewBag.IsLoggedInAdministrator = true;
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
+            model.Testovi = unitOfWork.Test.GetAll().Where(t => t.KursId == model.KursId).ToList();
+            foreach(Test t in model.Testovi)
+            {
+                t.Pitanja = unitOfWork.Pitanje.GetAll().Where(p => p.TestId == t.TestId).ToList();
+            }
             unitOfWork.Kurs.Delete(model);
             unitOfWork.Commit();
             return RedirectToAction("Kurs","Kurs");
@@ -57,16 +63,18 @@ namespace WebApp.Controllers
         [LoggedInAdministrator]
         public ActionResult IzbrisiLekciju([FromRoute(Name ="id")]int idLekcije, int kursId)
         {
-            Kurs kurs = unitOfWork.Kurs.FindById(new Kurs { KursId = kursId });
+            ViewBag.IsLoggedInAdministrator = true;
+            Kurs kurs = unitOfWork.Kurs.FindById(new Kurs { KursId = kursId }); 
             Lekcija model = kurs.Lekcije.FirstOrDefault(l => l.LekcijaId == idLekcije);
             kurs.Lekcije.Remove(model);
             unitOfWork.Commit();
-            return RedirectToAction("Kurs", "Kurs");
+            return View("Details",kurs);
         }
 
         [LoggedInBoth] //treba da i korisnik moze da procita
         public ActionResult PrikaziSadrzaj([FromRoute(Name ="id")] int lekcijaId)
         {
+            ViewBag.IsLoggedInAdministrator = true;
             Lekcija l = new Lekcija { LekcijaId = lekcijaId }; //nadji kurs koji ima lekciju sa ovim Id-em
             List<Kurs> kursevi = unitOfWork.Kurs.GetAll();
             Lekcija nova = new Lekcija();
@@ -98,6 +106,7 @@ namespace WebApp.Controllers
         [LoggedInBoth]
         public ActionResult Details([FromRoute(Name="id")] int id)
         {
+            ViewBag.IsLoggedInAdministrator = true;
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
             return View(model); //ovo je kurs i za njega prikazi ono sto se trazi u View-u
         }

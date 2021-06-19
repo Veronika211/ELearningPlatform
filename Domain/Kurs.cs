@@ -14,7 +14,7 @@ namespace Domain
         public string NazivKursa { get; set; }
         public List<Pohadjanje> Korisnici { get; set; }
         public List<Lekcija> Lekcije { get; set; }
-        public List<Test> Testovi { get; internal set; }
+        public List<Test> Testovi { get; set; }
         //lista testova
     }
 }

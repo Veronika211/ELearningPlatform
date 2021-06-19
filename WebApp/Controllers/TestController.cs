@@ -117,13 +117,14 @@ namespace WebApp.Controllers
         }
 
         // GET: TestController/Delete/5
-        public ActionResult Delete([FromRoute (Name ="id")]int id)
+        public ActionResult Delete([FromRoute (Name ="id")]int id, TestsViewModel tvm)
         {
             ViewBag.IsLoggedInAdministrator = true;
             Test model = uow.Test.FindById(new Test { TestId = id });
+            model.Pitanja = uow.Pitanje.GetAll().Where(p => p.TestId == model.TestId).ToList();
             uow.Test.Delete(model);
             uow.Commit();
-            return View();
+            return RedirectToAction("Index","Test");
         }
 
         public ActionResult IzbrisiPitanje([FromRoute(Name = "id")] int id, TestsViewModel tvm)
