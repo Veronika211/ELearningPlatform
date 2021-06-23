@@ -22,9 +22,16 @@ namespace WebApp.Controllers
        [LoggedInBoth] //treba i korisnik da vidi
         public ActionResult Kurs()
         {
-            List<Kurs> model = unitOfWork.Kurs.GetAll();
             int? korisnikid = HttpContext.Session.GetInt32("korisnikid"); //vraca null ako ne postoji, zato ?
             int? administratorid = HttpContext.Session.GetInt32("administratorid");
+            List<Pohadjanje> listaKurseva = unitOfWork.Pohadjanje.GetAll().Where(p => p.KorisnikId == korisnikid).ToList();//vracaju se sva pohadjanja za ovog korisnika 
+            //koji je prijavljen
+            List<Kurs> model = new List<Kurs>();
+            foreach (Pohadjanje p in listaKurseva)
+            {
+                Kurs kurs = unitOfWork.Kurs.GetAll().Single(k => k.KursId == p.KursId);//vraca taj jedan kurs
+                model.Add(kurs);
+            }
             if (korisnikid != null)
             {
                 ViewBag.IsLoggedInKorisnik = true;
@@ -40,12 +47,13 @@ namespace WebApp.Controllers
                 ViewBag.Username = HttpContext.Session.GetString("username");
                 byte[] adminBy = HttpContext.Session.Get("administrator");
                 Administrator administrator = JsonSerializer.Deserialize<Administrator>(adminBy); //ovako isto mozemo proveriti da li je admin ili korisnik
+                List<Kurs> modelAdm = unitOfWork.Kurs.GetAll().ToList();
+                return View("Kurs", modelAdm);
             }
             else
             {
                 return RedirectToAction("Index", "Korisnik");
             }
-            return View("Kurs", model);
         }
 
 
@@ -78,18 +86,24 @@ namespace WebApp.Controllers
         [LoggedInBoth] //treba da i korisnik moze da procita
         public ActionResult PrikaziSadrzaj([FromRoute(Name ="id")] int lekcijaId)
         {
-            ViewBag.IsLoggedInAdministrator = true;
+            int? korisnikid = HttpContext.Session.GetInt32("korisnikid");
+            int? administratorid = HttpContext.Session.GetInt32("administratorid");
+            if (korisnikid != null)
+                ViewBag.IsLoggedInKorisnik = true;
+            else
+                ViewBag.IsLoggedInAdministrator = true;
             Lekcija l = new Lekcija { LekcijaId = lekcijaId }; //nadji kurs koji ima lekciju sa ovim Id-em
             List<Kurs> kursevi = unitOfWork.Kurs.GetAll();
             Lekcija nova = new Lekcija();
+            List<Lekcija> listaLekcija = new List<Lekcija>();
             foreach(Kurs k in kursevi)
             {
-                nova = k.Lekcije.Single(lek => lek.LekcijaId == l.LekcijaId); //nadjem lekciju
-                if (nova != null)
+                foreach (Lekcija lek in k.Lekcije)
                 {
-                    break;
+                    listaLekcija.Add(lek);
                 }
-            }
+            } //napravim listu svih lekcija i sad samo uzmem ovu ciji sam id prosledila
+            nova = listaLekcija.FirstOrDefault(lek => lek.LekcijaId == lekcijaId);
             HttpContext.Session.SetString("id", lekcijaId.ToString());
             HttpContext.Session.SetString("sadrzaj", nova.Sadrzaj);
             HttpContext.Session.SetString("naziv", nova.Naziv);

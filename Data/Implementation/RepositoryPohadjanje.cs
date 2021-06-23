@@ -1,6 +1,7 @@
 ﻿using Domain;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -31,7 +32,7 @@ namespace Data.Implementation
 
         public List<Pohadjanje> GetAll()
         {
-            throw new NotImplementedException();
+            return context.Pohadjanje.ToList();
         }
 
         public List<Pohadjanje> Search(Expression<Func<Pohadjanje, bool>> pred)
