@@ -16,6 +16,7 @@ namespace Domain
         public DbSet<Test> Testovi { get; set; }
         public DbSet<Pitanje> Pitanja { get; set; }
         public DbSet<Dopuna> Dopune { get; set; }
+        public DbSet<Pohadjanje> Pohadjanje { get; set; }
         public DbSet<Checkbox> Checkboxes{ get; set; }
         public static readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
         {

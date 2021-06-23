@@ -11,6 +11,7 @@ namespace WebApp.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string KorisnikORAdministrator { get; set; }
+        
         //onaj koji je null od ove dvojice nije ulogovan
     }
 }

@@ -1,0 +1,27 @@
+﻿@model Kurs
+
+<h1> Kurs</h1>
+<h3>ID kursa: @Model.KursId</h3>
+<h3>Naziv: @Model.NazivKursa</h3>
+
+
+<h1>Lekcije: </h1>
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>Redni broj</th>
+            <th>Naziv lekcije</th>
+            <th>Sadrzaj</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Lekcija l in Model.Lekcije)
+        {
+            <tr>
+                <td>@l.LekcijaId</td>
+                <td>@l.Naziv</td>
+                <td>@Html.ActionLink("Sadrzaj", "PrikaziSadrzaj", "Kurs", new { id = l.LekcijaId })</td>
+            </tr>
+        }
+    </tbody>
+</table>

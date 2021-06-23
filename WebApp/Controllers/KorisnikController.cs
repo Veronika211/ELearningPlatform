@@ -20,7 +20,9 @@ namespace WebApp.Controllers
         public KorisnikController(IUnitOfWork uow)
         {
             this.uow = uow;
+
         }
+        
         // GET: KorisnikController
         [NotLoggedIn]
         public ActionResult Index()
@@ -39,8 +41,11 @@ namespace WebApp.Controllers
                     if (korisnik != null)
                     {
                         HttpContext.Session.SetInt32("korisnikid", korisnik.KorisnikId);
-                        HttpContext.Session.SetString("username", korisnik.Username); //ovde definisemo da li je admin ili korisnik!!!
+                        HttpContext.Session.SetString("username", korisnik.Username);
+                        HttpContext.Session.SetInt32("id", korisnik.KorisnikId);
                         HttpContext.Session.Set("korisnik", JsonSerializer.SerializeToUtf8Bytes(korisnik)); //serijalizujemo celog korisnika
+                        
+                        //ne znam da li sme da se ima ova promenljiva i kako ce se koristiti
                         return RedirectToAction("Kurs", "Kurs");
                     }
                 }
@@ -94,6 +99,20 @@ namespace WebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [LoggedInKorisnik]
+        public ActionResult PrikazPrijavaKursa()
+        {
+            ViewBag.IsLoggedInKorisnik = true;
+            CreateKorisnikViewModel kvm = new CreateKorisnikViewModel();
+            int? id = HttpContext.Session.GetInt32("id");
+            kvm.KorisnikId = id;
+            kvm.Korisnik = uow.Korisnik.FindById(new Korisnik { KorisnikId=(int)id});
+            kvm.ListaSvihKurseva = uow.Kurs.GetAll();
+            List<SelectListItem> selectList = kvm.ListaSvihKurseva.Select(k => new SelectListItem { Text = k.NazivKursa, Value = k.KursId.ToString() }).ToList();
+            kvm.Kursevi = selectList;
+            return View("DodajPohadjanje", kvm); 
+        }
+
         // GET: KorisnikController/Details/5
         /* public ActionResult Details(int id)
          {
@@ -101,19 +120,8 @@ namespace WebApp.Controllers
          }*/
 
         // GET: KorisnikController/Create
-        
-        [LoggedInKorisnik]
-        public ActionResult Create()
-        {
-            ViewBag.IsLoggedInKorisnik = true;
-            List<Kurs> list = uow.Kurs.GetAll();
-            List<SelectListItem> selectList = list.Select(k => new SelectListItem { Text = k.NazivKursa, Value = k.KursId.ToString()}).ToList();
-            CreateKorisnikViewModel model = new CreateKorisnikViewModel
-            {
-                Kursevi = selectList
-            };
-            return View(model);
-        }
+
+     
 
         // POST: KorisnikController/Create
         [HttpPost]
@@ -121,7 +129,8 @@ namespace WebApp.Controllers
         [LoggedInKorisnik]
         public ActionResult Create(CreateKorisnikViewModel viewmodel)
         {
-            ViewBag.IsLoggedInKorisnik = true;
+            ViewBag.IsLoggedInKorisnik = true; //ova cela metoda je za dodavanje korisnika i 
+            //to necu koristiti valjda
             try
             {
                 uow.Korisnik.Add(viewmodel.Korisnik);
@@ -137,18 +146,33 @@ namespace WebApp.Controllers
 
         [HttpPost]
         [LoggedInKorisnik]
-        public ActionResult AddPohadjanje(PohadjanjeViewModel request)
+        public ActionResult PrijavaKursa(CreateKorisnikViewModel cvm)
         {
             ViewBag.IsLoggedInKorisnik = true;
-            Console.WriteLine(request.RedniBroj);
-            string naziv = uow.Kurs.FindById(new Kurs { KursId = request.KursId }).NazivKursa;
-            PohadjanjeViewModel model = new PohadjanjeViewModel
+            int id = ViewBag.KorisnikId;
+            cvm.KorisnikId = id;
+            return RedirectToAction("Kurs", "Kurs"); 
+        }
+
+        [HttpPost]
+        [LoggedInKorisnik]
+        
+        public ActionResult AddPohadjanje(CreateKorisnikViewModel model)
+        {
+            ViewBag.IsLoggedInKorisnik = true;
+            int idKursa = model.KursId;
+            int? idKorisnika = HttpContext.Session.GetInt32("id");
+            Korisnik korisnik = uow.Korisnik.FindById(new Korisnik { KorisnikId = (int)idKorisnika }); //nadjem celog korisnika
+            Kurs kurs = uow.Kurs.FindById(new Kurs { KursId = idKursa });
+            Pohadjanje p = new Pohadjanje
             {
-                RedniBroj = request.RedniBroj,
-                KursId = request.KursId,
-                NazivKursa = naziv
+                KorisnikId = (int)idKorisnika,
+                KursId = idKursa,
+                Bodovi = 0
             };
-            return PartialView("PohadjanjePartial", model);
+            uow.Pohadjanje.Add(p);
+            uow.Commit();
+            return RedirectToAction("Kurs","Kurs"); //ne mora da znaci da ce ovaj da vraca
         }
 
 

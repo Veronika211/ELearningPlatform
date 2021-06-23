@@ -1,0 +1,32 @@
+﻿@model WebApp.Models.TestsViewModel
+
+
+<h1>Pitanja: </h1>
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>Redni broj</th>
+            <th>Pitanje</th>
+            <th>Pogledaj</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Checkbox c in Model.Checkboxes)
+        {
+            <tr>
+                <td>@c.PitanjeId</td>
+                <td>@c.Naziv</td>
+                <td>@Html.ActionLink("Pogledaj", "PogledajPitanje", "Test", new { id = c.PitanjeId })</td>
+            </tr>
+        }
+        @foreach (Dopuna d in Model.Dopune)
+        {
+            <tr>
+                <td>@d.PitanjeId</td>
+                <td>@d.Naziv</td>
+                <td>@Html.ActionLink("Pogledaj", "PogledajPitanje", "Test", new { id = d.PitanjeId })</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,27 @@
+﻿@model List<Domain.Kurs>
+@{
+    ViewData["Title"] = "Kursevi";
+}
+
+<h1>Kursevi: </h1>
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>Redni broj</th>
+            <th>Naziv kursa</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Kurs k in Model)
+        {
+        <tr>
+            <td>@k.KursId</td>
+            <td>@k.NazivKursa</td>
+            <td>@Html.ActionLink("Pogledaj lekcije", "DetailsKorisnik", "Kurs", new { id = k.KursId })</td>
+            <td>@Html.ActionLink("Testovi", "PrikaziTestKorsnik", "Test", new { id = k.KursId })</td>
+        </tr>
+        }
+    </tbody>
+</table>

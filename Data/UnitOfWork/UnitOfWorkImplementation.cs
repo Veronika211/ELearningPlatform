@@ -17,11 +17,13 @@ namespace Data.UnitOfWork
             Korisnik = new RepositoryKorisnik(context);
             Administrator = new RepositoryAdministrator(context);
             Pitanje = new RepositoryPitanje(context);
+            Pohadjanje = new RepositoryPohadjanje(context);
         }
         public IRepositoryKurs Kurs { get; set; }
         public IRepositoryTest Test { get; set; }
         public IRepositoryKorisnik Korisnik { get; set; }
         public IRepositoryPitanje Pitanje { get; set; }
+        public IRepositoryPohadjanje Pohadjanje { get; set; }
 
         public IRepositoryAdministrator Administrator { get; set; }
         public void Commit()

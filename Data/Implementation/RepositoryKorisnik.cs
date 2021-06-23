@@ -25,6 +25,12 @@ namespace Data.Implementation
             context.Korisnici.Remove(k);
         }
 
+        //kod ovoga nesto nije ok
+        public void DodajPohadjanje(Pohadjanje p)
+        {
+            context.Pohadjanje.Add(p);
+        }
+
         public Korisnik FindById(Korisnik korisnik)
         {
             return context.Korisnici.Single(k => k.KorisnikId == korisnik.KorisnikId);

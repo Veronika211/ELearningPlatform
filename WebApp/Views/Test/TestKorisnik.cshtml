@@ -1,0 +1,42 @@
+﻿@model WebApp.Models.TestsViewModel
+
+@{
+    ViewData["Title"] = "Testovi";
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Test ID
+            </th>
+            <th>
+                Kurs
+            </th>
+            <th>
+                Nivo
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Test t in Model.Testovi)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => t.TestId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => t.KursId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => t.Nivo)
+                </td>
+                <td>
+                    @Html.ActionLink("Zapocni test", "PitanjaKorisnik", "Test", new { id = t.TestId }, null)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

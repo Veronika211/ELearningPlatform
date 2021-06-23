@@ -29,8 +29,10 @@ namespace WebApp.Controllers
             {
                 ViewBag.IsLoggedInKorisnik = true;
                 ViewBag.Username = HttpContext.Session.GetString("username");
+                ViewBag.KorisnikId = HttpContext.Session.GetInt32("username");
                 byte[] korisnikBy = HttpContext.Session.Get("korisnik");
                 Korisnik korisnik = JsonSerializer.Deserialize<Korisnik>(korisnikBy); //ovako isto mozemo proveriti da li je admin ili korisnik
+                return View("KursKorisnik", model);
             }
             else if (administratorid != null)
             {
@@ -45,6 +47,8 @@ namespace WebApp.Controllers
             }
             return View("Kurs", model);
         }
+
+
 
         [LoggedInAdministrator]
         public ActionResult Delete(int id)
@@ -103,14 +107,22 @@ namespace WebApp.Controllers
             return RedirectToAction("Kurs", "Kurs");
         }
 
-        [LoggedInBoth]
+        [LoggedInAdministrator]
         public ActionResult Details([FromRoute(Name="id")] int id)
         {
             ViewBag.IsLoggedInAdministrator = true;
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
             return View(model); //ovo je kurs i za njega prikazi ono sto se trazi u View-u
         }
-        
+
+        [LoggedInKorisnik]
+        public ActionResult DetailsKorisnik([FromRoute(Name = "id")] int id)
+        {
+            ViewBag.IsLoggedInKorisnik = true;
+            Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
+            return View(model); //ovo je kurs i za njega prikazi ono sto se trazi u View-u
+        }
+
         [HttpGet]
         [LoggedInAdministrator]
         public ActionResult Create()

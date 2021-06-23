@@ -12,6 +12,7 @@ namespace WebApp.Models
         public int TestId { get; set; }
         public List<Dopuna> Dopune{ get; set; } //njegova pitanja koja treba da se prikazu
         public List<Checkbox> Checkboxes { get; set; } //isto pitanja zatvorena
+        public Kurs Kurs { get; set; } //ovo za prikazivanje testa kod korisnika
         //sad bi trebalo da se TestId prosledi i da se dodele vrednosti za Dopune i Checkboxes
     }
 }

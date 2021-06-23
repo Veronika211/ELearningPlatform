@@ -21,6 +21,7 @@ namespace WebApp.Controllers
         {
             this.uow = uow;
         }
+
         public ActionResult Index(TestsViewModel tvm)
         {
             int? korisnikid = HttpContext.Session.GetInt32("korisnikid"); //vraca null ako ne postoji, zato ?
@@ -34,22 +35,44 @@ namespace WebApp.Controllers
             tvm.Testovi = uow.Test.GetAll(); //definisala sam sta su testovi
             return View(tvm);
         }
+        [LoggedInKorisnik]
+        public ActionResult PrikaziTestKorsnik([FromRoute(Name = "id")] int kursId,TestsViewModel tvm)
+        {
+            ViewBag.IsLoggedInKorisnik = true;
+            //za ovaj kurs samo da se prikazu testovi
+           // int? kursid = HttpContext.Session.GetInt32("kursid"); 
+            tvm.Testovi = uow.Test.GetAll().Where(t => t.KursId == kursId).ToList();
+            return View("TestKorisnik",tvm);
+        }
 
         // GET: TestController/Details/5
+        [LoggedInAdministrator]
         public ActionResult Details([FromRoute(Name = "id")] int id, TestsViewModel tvm)
         {
-             ViewBag.IsLoggedInAdministrator = true;
+            ViewBag.IsLoggedInAdministrator = true;
             tvm.TestId = id;
             List<Pitanje> pitanja = uow.Pitanje.GetAll().Where(p => p.TestId == tvm.TestId).ToList();
-;           List<Checkbox> checkboxes = pitanja.OfType<Checkbox>().ToList();
+            List<Checkbox> checkboxes = pitanja.OfType<Checkbox>().ToList();
+            List<Dopuna> dopune = pitanja.OfType<Dopuna>().ToList();
+            tvm.Checkboxes = checkboxes;
+            tvm.Dopune = dopune;
+            return View(tvm);
+        }
+        [LoggedInKorisnik]
+        public ActionResult PitanjaKorisnik([FromRoute(Name = "id")] int id, TestsViewModel tvm)
+        {
+            ViewBag.IsLoggedInKorisnik = true;
+            tvm.TestId = id;
+            List<Pitanje> pitanja = uow.Pitanje.GetAll().Where(p => p.TestId == tvm.TestId).ToList();
+            List<Checkbox> checkboxes = pitanja.OfType<Checkbox>().ToList();
             List<Dopuna> dopune = pitanja.OfType<Dopuna>().ToList();
             tvm.Checkboxes = checkboxes;
             tvm.Dopune = dopune;
             return View(tvm);
         }
 
-            // GET: TestController/Create
-            public ActionResult Create(int id)
+        // GET: TestController/Create
+        public ActionResult Create(int id)
         {
             List<SelectListItem> kursevi = new List<SelectListItem>();
             foreach(Kurs k in uow.Kurs.GetAll())
