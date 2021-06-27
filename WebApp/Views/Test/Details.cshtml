@@ -17,7 +17,7 @@
             <tr>
                 <td>@c.PitanjeId</td>
                 <td>@c.Naziv</td>
-                <td>@Html.ActionLink("Pogledaj", "PogledajPitanje", "Test", new { id = c.PitanjeId })</td>
+                <td>@Html.ActionLink("Pogledaj", "PogledajPitanjeCheckbox", "Test", new { id = c.PitanjeId })</td>
                 <td>@Html.ActionLink("Izbrisi", "IzbrisiPitanje", "Test", new { id = c.PitanjeId })</td>
             </tr>
         }
@@ -26,7 +26,7 @@
             <tr>
                 <td>@d.PitanjeId</td>
                 <td>@d.Naziv</td>
-                <td>@Html.ActionLink("Pogledaj", "PogledajPitanje", "Test", new { id = d.PitanjeId })</td>
+                <td>@Html.ActionLink("Pogledaj", "PogledajPitanjeDopuna", "Test", new { id = d.PitanjeId })</td>
                 <td>@Html.ActionLink("Izbrisi", "IzbrisiPitanje", "Test", new { id = d.PitanjeId })</td>
             </tr>
         }

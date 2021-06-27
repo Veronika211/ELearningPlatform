@@ -18,10 +18,11 @@
         </tr>
     </thead>
     <tbody>
+        @{ int rowNo = 0; }
         @foreach (Kurs k in Model)
         {
             <tr>
-                <td>@k.KursId</td>
+                <td>@{rowNo++;} @rowNo</td>
                 <td>@k.NazivKursa</td>
                 <td>@Html.ActionLink("Detalji", "Details", "Kurs", new { id = k.KursId })</td>
                 <td>@Html.ActionLink("Edit", "Edit", "Kurs", new { id = k.KursId })</td>

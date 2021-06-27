@@ -43,6 +43,7 @@ namespace WebApp.Controllers
                         HttpContext.Session.SetInt32("korisnikid", korisnik.KorisnikId);
                         HttpContext.Session.SetString("username", korisnik.Username);
                         HttpContext.Session.SetInt32("id", korisnik.KorisnikId);
+                        HttpContext.Session.SetInt32("idk", korisnik.KorisnikId);
                         HttpContext.Session.Set("korisnik", JsonSerializer.SerializeToUtf8Bytes(korisnik)); //serijalizujemo celog korisnika
                         
                         //ne znam da li sme da se ima ova promenljiva i kako ce se koristiti
@@ -104,7 +105,7 @@ namespace WebApp.Controllers
         {
             ViewBag.IsLoggedInKorisnik = true;
             CreateKorisnikViewModel kvm = new CreateKorisnikViewModel();
-            int? id = HttpContext.Session.GetInt32("id");
+            int? id = HttpContext.Session.GetInt32("idk");
             kvm.KorisnikId = id;
             kvm.Korisnik = uow.Korisnik.FindById(new Korisnik { KorisnikId=(int)id});
             kvm.ListaSvihKurseva = uow.Kurs.GetAll();

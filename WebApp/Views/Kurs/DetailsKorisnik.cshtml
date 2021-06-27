@@ -15,13 +15,14 @@
         </tr>
     </thead>
     <tbody>
+        @{ int rowNo = 0; }
         @foreach (Lekcija l in Model.Lekcije)
         {
-            <tr>
-                <td>@l.LekcijaId</td>
-                <td>@l.Naziv</td>
-                <td>@Html.ActionLink("Sadrzaj", "PrikaziSadrzaj", "Kurs", new { id = l.LekcijaId })</td>
-            </tr>
+        <tr>
+            <td>@{rowNo++;} @rowNo</td>
+            <td>@l.Naziv</td>
+            <td>@Html.ActionLink("Sadrzaj", "PrikaziSadrzaj", "Kurs", new { id = l.LekcijaId })</td>
+        </tr>
         }
     </tbody>
 </table>

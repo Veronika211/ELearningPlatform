@@ -126,6 +126,7 @@ namespace WebApp.Controllers
         {
             ViewBag.IsLoggedInAdministrator = true;
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
+            HttpContext.Session.SetInt32("kursid", model.KursId);
             return View(model); //ovo je kurs i za njega prikazi ono sto se trazi u View-u
         }
 
@@ -165,6 +166,33 @@ namespace WebApp.Controllers
             unitOfWork.Kurs.Add(kurs);
             unitOfWork.Commit();
             return Kurs();
+        }
+
+        
+        [LoggedInAdministrator]
+        public ActionResult UnosLekcije()
+        {
+            ViewBag.IsLoggedInAdministrator = true;
+            int id = (int)HttpContext.Session.GetInt32("kursid");
+            Kurs kurs = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
+            Lekcija model = new Lekcija { Kurs = kurs, KursId = id};
+            return View("UnosLekcije", model);
+        }
+
+        [ValidateAntiForgeryToken]
+        [LoggedInAdministrator]
+        [HttpPost]
+        public ActionResult UnosLekcije2(Lekcija model)
+        {
+            //valjda se prenosi lekcija i sad samo treba da je dodam u listu kod lekcija tog kursa
+            ViewBag.IsLoggedInAdministrator = true;
+            int id = (int)HttpContext.Session.GetInt32("kursid");
+            Kurs k = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
+            model.Kurs = k;
+            model.KursId = id;
+            k.Lekcije.Add(model);
+            unitOfWork.Commit();
+            return View("Details", model.Kurs);
         }
     }
 }

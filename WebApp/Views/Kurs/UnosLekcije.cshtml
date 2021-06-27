@@ -1,0 +1,11 @@
+﻿@model Lekcija
+
+<h1>Dodaj novu lekciju</h1>
+<h1>Naziv kursa: @Model.KursId @Model.Kurs.NazivKursa</h1>
+<form method="post" asp-controller="Kurs" asp-action="UnosLekcije2">
+    <label>Naziv lekcije:</label>
+    <input type="text" asp-for="Naziv" />
+    <label>Sadrzaj lekcije:</label>
+    <input type="text" asp-for="Sadrzaj" />
+    <input type="submit" value="Dodaj lekciju" />
+</form>

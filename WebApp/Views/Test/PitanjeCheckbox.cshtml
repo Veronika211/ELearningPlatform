@@ -1,0 +1,45 @@
+﻿@model Checkbox
+
+<h1>Pregled pitanja:</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="IzmeniPitanjeCheckbox" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <h3>Pitanje</h3>
+                <input asp-for="Naziv" class="form-control" />
+                <span asp-validation-for="Naziv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <h3>Tacan odgovor</h3>
+                <input asp-for="TacanOdgovor" class="form-control" />
+                <span asp-validation-for="TacanOdgovor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <h3>1. Netacan odgovor:</h3>
+                <input asp-for="NetacanOdgovor1" class="form-control" />
+                <span asp-validation-for="NetacanOdgovor1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <h3>2. Netacan odgovor</h3>
+                <input asp-for="NetacanOdgovor2" class="form-control" />
+                <span asp-validation-for="NetacanOdgovor2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <h3>3. Netacan odgovor</h3>
+                <input asp-for="NetacanOdgovor3" class="form-control" />
+                <span asp-validation-for="NetacanOdgovor3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <h3>Bodovi:</h3>
+                <input asp-for="TacanBodovi" class="form-control" />
+                <span asp-validation-for="TacanBodovi" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Izmeni pitanje" class="btn btn-primary" />
+            </div> @*ovde implementirati u kontroleru za izmenu pitanja sutra*@
+        </form>
+    </div>
+</div>

@@ -177,8 +177,21 @@ namespace WebApp.Controllers
             }
         }
 
-        
+        [LoggedInAdministrator]
 
-       
+        public ActionResult PogledajPitanjeDopuna([FromRoute(Name = "id")] int id)
+        {
+            ViewBag.IsLoggedInAdministrator = true;
+            Dopuna model = (Dopuna)uow.Pitanje.FindById(new Pitanje { PitanjeId = id }); //ne znam da li moze ovako
+            return View("PitanjeDopuna", model);
+        }
+
+        public ActionResult PogledajPitanjeCheckbox([FromRoute(Name = "id")] int id)
+        {
+            ViewBag.IsLoggedInAdministrator = true;
+            Checkbox model = (Checkbox)uow.Pitanje.FindById(new Pitanje { PitanjeId = id }); //ne znam da li moze ovako
+            return View("PitanjeCheckbox", model);
+        }
+
     }
 }

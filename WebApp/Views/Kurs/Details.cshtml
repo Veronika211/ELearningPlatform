@@ -6,6 +6,8 @@
 
 
 <h1>Lekcije: </h1>
+
+
 <table class="table table-hover">
     <thead class="thead-dark">
         <tr>
@@ -17,24 +19,23 @@
         </tr>
     </thead>
     <tbody>
+        @{ int rowNo = 0; }
         @foreach (Lekcija l in Model.Lekcije)
         {
             <tr>
-                <td>@l.LekcijaId</td>
+                <td>@{rowNo++;} @rowNo</td>
                 <td>@l.Naziv</td>
-                <td>@Html.ActionLink("Sadrzaj", "PrikaziSadrzaj", "Kurs", new {id=l.LekcijaId})</td>
+                <td>@Html.ActionLink("Sadrzaj", "PrikaziSadrzaj", "Kurs", new { id = l.LekcijaId })</td>
                 <td>@Html.ActionLink("Izmeni", "IzmenaLekcije", "Kurs", new { id = l.LekcijaId })</td>
-                <td>@Html.ActionLink("Izbrisi", "IzbrisiLekciju", "Kurs", new { id = l.LekcijaId, kursId=Model.KursId })</td>
+                <td>@Html.ActionLink("Izbrisi", "IzbrisiLekciju", "Kurs", new { id = l.LekcijaId, kursId = Model.KursId })</td>
             </tr>
         }
     </tbody>
 </table>
-<div class="form-control">
-    <form method="post" asp-controller="Kurs" asp-action="Edit">
-        <label>Naziv:</label>
-        <input type="text" placeholder="Naziv kursa..." />
-        <span asp-validation-for="NazivKursa"></span>
-        @Html.ValidationMessage("NazivKursaValidation")
-        <input type="submit" value="Izmeni kurs" />
+<div>
+    <form asp-controller="Kurs" asp-action="UnosLekcije">
+        <input type="submit" value="Unesi novu lekciju" asp-controller="Kurs" asp-action="UnosLekcije" />
     </form>
 </div>
+
+
