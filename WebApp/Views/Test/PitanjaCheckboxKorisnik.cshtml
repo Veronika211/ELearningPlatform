@@ -1,0 +1,28 @@
+﻿@model WebApp.Models.CheckboxViewModel
+
+@Model.Naziv
+
+<h6>Vas odgovor:</h6>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="PotvrdiOdgovorCheckbox" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="form-group">
+                <div class="col-md-10">
+                    @Html.RadioButtonFor(model => model.Odgovor, Model.TacanOdgovor)
+                    @Model.TacanOdgovor
+                    @Html.RadioButtonFor(model => model.Odgovor, Model.NetacanOdgovor1)
+                    @Model.NetacanOdgovor1
+                    @Html.RadioButtonFor(model => model.Odgovor, Model.NetacanOdgovor2)
+                    @Model.NetacanOdgovor2
+                    @Html.RadioButtonFor(model => model.Odgovor, Model.NetacanOdgovor3)
+                    @Model.NetacanOdgovor3
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Potvrdi odgovor" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

@@ -11,20 +11,21 @@
         </tr>
     </thead>
     <tbody>
+        @{ int rowNo = 0; }
         @foreach (Checkbox c in Model.Checkboxes)
         {
             <tr>
-                <td>@c.PitanjeId</td>
+                <td>@{rowNo++;} @rowNo</td>
                 <td>@c.Naziv</td>
-                <td>@Html.ActionLink("Pogledaj", "PogledajPitanje", "Test", new { id = c.PitanjeId })</td>
+                <td>@Html.ActionLink("Pogledaj", "PitanjaCheckboxKorisnik", "Test", new { id = c.PitanjeId })</td>
             </tr>
         }
         @foreach (Dopuna d in Model.Dopune)
         {
             <tr>
-                <td>@d.PitanjeId</td>
+                <td>@{rowNo++;} @rowNo</td>
                 <td>@d.Naziv</td>
-                <td>@Html.ActionLink("Pogledaj", "PogledajPitanje", "Test", new { id = d.PitanjeId })</td>
+                <td>@Html.ActionLink("Pogledaj", "PitanjaDopunaKorisnik", "Test", new { id = d.PitanjeId })</td>
             </tr>
         }
     </tbody>

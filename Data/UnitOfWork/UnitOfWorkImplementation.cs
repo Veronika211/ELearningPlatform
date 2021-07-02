@@ -18,6 +18,7 @@ namespace Data.UnitOfWork
             Administrator = new RepositoryAdministrator(context);
             Pitanje = new RepositoryPitanje(context);
             Pohadjanje = new RepositoryPohadjanje(context);
+            Polaganje = new RepositoryPolaganje(context);
         }
         public IRepositoryKurs Kurs { get; set; }
         public IRepositoryTest Test { get; set; }
@@ -26,6 +27,7 @@ namespace Data.UnitOfWork
         public IRepositoryPohadjanje Pohadjanje { get; set; }
 
         public IRepositoryAdministrator Administrator { get; set; }
+        public IRepositoryPolaganje Polaganje { get; set; }
         public void Commit()
         {
             context.SaveChanges();

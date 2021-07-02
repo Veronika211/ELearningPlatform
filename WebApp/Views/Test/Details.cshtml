@@ -12,10 +12,11 @@
         </tr>
     </thead>
     <tbody>
+        @{ int rowNo = 0; }
         @foreach (Checkbox c in Model.Checkboxes)
         {
             <tr>
-                <td>@c.PitanjeId</td>
+                <td>@{rowNo++;} @rowNo</td>
                 <td>@c.Naziv</td>
                 <td>@Html.ActionLink("Pogledaj", "PogledajPitanjeCheckbox", "Test", new { id = c.PitanjeId })</td>
                 <td>@Html.ActionLink("Izbrisi", "IzbrisiPitanje", "Test", new { id = c.PitanjeId })</td>
@@ -24,7 +25,7 @@
         @foreach (Dopuna d in Model.Dopune)
         {
             <tr>
-                <td>@d.PitanjeId</td>
+                <td>@{rowNo++;} @rowNo</td>
                 <td>@d.Naziv</td>
                 <td>@Html.ActionLink("Pogledaj", "PogledajPitanjeDopuna", "Test", new { id = d.PitanjeId })</td>
                 <td>@Html.ActionLink("Izbrisi", "IzbrisiPitanje", "Test", new { id = d.PitanjeId })</td>
@@ -32,3 +33,12 @@
         }
     </tbody>
 </table>
+<h6>Unesi novo pitanje</h6>
+<div>
+    <form asp-controller="Test" asp-action="UnosPitanjaNaDopunu">
+        <input type="submit" value="Dopuna" asp-controller="Test" asp-action="UnosPitanjaNaDopunu" />
+    </form>
+    <form asp-controller="Test" asp-action="UnosPitanjaCheckbox">
+        <input type="submit" value="Checkbox" asp-controller="Test" asp-action="UnosPitanjaCheckbox" />
+    </form>
+</div>

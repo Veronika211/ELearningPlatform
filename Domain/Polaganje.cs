@@ -11,6 +11,7 @@ namespace Domain
         public int KorisnikId { get; set; }
         public Korisnik Korisnik { get; set; }
         public Test Test { get; set; }
+        public int TestId { get; set; }
         public int BodoviT { get; set; }
     }
 }

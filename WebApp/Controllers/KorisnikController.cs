@@ -86,7 +86,7 @@ namespace WebApp.Controllers
         {
             if (uow.Korisnik.Search(k => k.Username == model.Username).Any())
             {
-                ModelState.AddModelError(string.Empty, "Username is taken!");
+                ModelState.AddModelError(string.Empty, "Korisnicko ime je vec zauzeto!");
                 return View();
             }
                 uow.Korisnik.Add(new Korisnik { Ime = model.Ime, Prezime = model.Prezime, Username = model.Username, Password = model.Password, BrPoena = 0 });

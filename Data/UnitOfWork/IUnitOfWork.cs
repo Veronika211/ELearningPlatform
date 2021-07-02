@@ -12,6 +12,7 @@ namespace Data.UnitOfWork
         public IRepositoryAdministrator Administrator { get; set; }
         public IRepositoryPitanje Pitanje { get; set; }
         public IRepositoryPohadjanje Pohadjanje { get; set; }
+        public IRepositoryPolaganje Polaganje { get; set; }
         void Commit();
     }
 }

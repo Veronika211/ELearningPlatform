@@ -51,6 +51,7 @@ namespace WebApp.Controllers
         {
             ViewBag.IsLoggedInAdministrator = true;
             tvm.TestId = id;
+            HttpContext.Session.SetInt32("testid",id); //ovo koristim kad dodajem novo pitanje za taj test
             List<Pitanje> pitanja = uow.Pitanje.GetAll().Where(p => p.TestId == tvm.TestId).ToList();
             List<Checkbox> checkboxes = pitanja.OfType<Checkbox>().ToList();
             List<Dopuna> dopune = pitanja.OfType<Dopuna>().ToList();
@@ -62,6 +63,48 @@ namespace WebApp.Controllers
         public ActionResult PitanjaKorisnik([FromRoute(Name = "id")] int id, TestsViewModel tvm)
         {
             ViewBag.IsLoggedInKorisnik = true;
+            List<Polaganje> polaganja = uow.Polaganje.GetAll();
+            int korisnikid = (int)HttpContext.Session.GetInt32("korisnikid");
+            Korisnik k = uow.Korisnik.FindById(new Korisnik { KorisnikId = korisnikid });
+            int idTesta = id;
+            Test t = uow.Test.FindById(new Test { TestId = id });
+            if (polaganja.Count>0)
+            {
+                //ako lista nije prazna trazimo ovog korisnika i ovaj test
+                //ako ga vec nema dodati ga u bazu, a ako ga ima preskociti izbaciti korisnika
+                //kasnije implementirati da tu iskoci poruka da je ovaj test vec radio ili sta vec
+                bool exists = false;
+                foreach(Polaganje p in polaganja)
+                {
+                    if(p.Test.TestId==idTesta && p.KorisnikId == korisnikid)
+                    {
+                        exists = true;
+                        break;
+                    }
+                }//vraca da li polaganje vec postoji, ako ne postoji dodati ga
+                if (!exists)
+                {
+                    uow.Polaganje.Add(new Polaganje
+                    {
+                        Korisnik = k,
+                        KorisnikId = korisnikid,
+                        Test = t,
+                        TestId = idTesta
+                    });
+                    uow.Commit();
+                }
+            }
+            else
+            {
+                uow.Polaganje.Add(new Polaganje
+                {
+                    Korisnik = k,
+                    KorisnikId = korisnikid,
+                    Test = t,
+                    TestId = idTesta
+                });
+                uow.Commit();
+            }
             tvm.TestId = id;
             List<Pitanje> pitanja = uow.Pitanje.GetAll().Where(p => p.TestId == tvm.TestId).ToList();
             List<Checkbox> checkboxes = pitanja.OfType<Checkbox>().ToList();
@@ -186,11 +229,141 @@ namespace WebApp.Controllers
             return View("PitanjeDopuna", model);
         }
 
+        [LoggedInAdministrator]
         public ActionResult PogledajPitanjeCheckbox([FromRoute(Name = "id")] int id)
         {
             ViewBag.IsLoggedInAdministrator = true;
             Checkbox model = (Checkbox)uow.Pitanje.FindById(new Pitanje { PitanjeId = id }); //ne znam da li moze ovako
             return View("PitanjeCheckbox", model);
+        }
+
+        [LoggedInAdministrator]
+        public ActionResult UnosPitanjaNaDopunu()
+        {
+            ViewBag.IsLoggedInAdministrator = true;
+            //prosledjeni id bi trebalo da je id testa
+            return View("UnosPitanjaNaDopunu");
+        }
+
+        [LoggedInAdministrator]
+        [HttpPost]
+        public ActionResult DodajPitanjeNaDopunu(Dopuna model)
+        {
+            ViewBag.IsLoggedInAdministrator = true;
+            //prosledjeni id bi trebalo da je id testa
+            int testId = (int)HttpContext.Session.GetInt32("testid");
+            model.TestId = testId;
+            uow.Pitanje.Add(new Dopuna
+            {
+                TestId = model.TestId,
+                TacanOdgovor = model.TacanOdgovor,
+                Naziv = model.Naziv,
+                TacanBodovi = model.TacanBodovi
+            });
+            uow.Commit();
+            return View("PitanjeDopuna",model);
+        }
+
+        [LoggedInAdministrator]
+        public ActionResult UnosPitanjaCheckbox()
+        {
+            ViewBag.IsLoggedInAdministrator = true;
+            //prosledjeni id bi trebalo da je id testa
+            return View("UnosPitanjaCheckbox");
+        }
+
+        [LoggedInAdministrator]
+        [HttpPost]
+        public ActionResult DodajPitanjeCheckbox(Checkbox model)
+        {
+            ViewBag.IsLoggedInAdministrator = true;
+            //prosledjeni id bi trebalo da je id testa
+            int testId = (int)HttpContext.Session.GetInt32("testid");
+            model.TestId = testId;
+            uow.Pitanje.Add(new Checkbox
+            {
+                Naziv = model.Naziv,
+                TacanOdgovor = model.TacanOdgovor,
+                TacanBodovi = model.TacanBodovi,
+                NetacanOdgovor1 = model.NetacanOdgovor1,
+                NetacanOdgovor2 = model.NetacanOdgovor2,
+                NetacanOdgovor3 = model.NetacanOdgovor3,
+                TestId = model.TestId
+            }) ;
+            uow.Commit();
+            return View("PitanjeCheckbox", model);
+        }
+
+        [LoggedInKorisnik]
+
+        public ActionResult PitanjaDopunaKorisnik([FromRoute(Name = "id")] int id)
+        {
+            ViewBag.IsLoggedInKorisnik = true;
+            Dopuna model = (Dopuna)uow.Pitanje.FindById(new Dopuna { PitanjeId = id });
+            return View("PitanjaDopunaKorisnik", model);
+        }
+
+        [LoggedInKorisnik]
+        [HttpPost]
+        //ova metoda sluzi da proveri da li je korisnik uneo tacan odgovor
+        //potrebno je preneti 
+        public ActionResult PotvrdiOdgovorDopuna(Dopuna model)
+        {
+            ViewBag.IsLoggedInKorisnik = true;
+            string korisnikovOdgovor = model.TacanOdgovor;
+            Dopuna pitanje = (Dopuna)uow.Pitanje.FindById(new Dopuna { PitanjeId=model.PitanjeId});
+            //nadjem to pitanje u bazi i proveravam da li se podudaraju odgovori
+            //ako da dodajem ih korisniku u bodove
+            //ako ne onda nista
+            //videti kako se dodaje i polaganje
+            int idKorisnika =(int)HttpContext.Session.GetInt32("korisnikid");
+            Korisnik k = uow.Korisnik.FindById(new Korisnik { KorisnikId = idKorisnika });
+            int idTesta = pitanje.TestId;
+            foreach (Polaganje p in uow.Polaganje.GetAll())
+            {
+                if (p.KorisnikId == idKorisnika && p.TestId == idTesta)
+                {
+                    p.BodoviT += pitanje.TacanBodovi;
+                    uow.Commit();
+                    break;
+                }
+            }
+
+            if (pitanje.TacanOdgovor == korisnikovOdgovor)
+            {
+                k.BrPoena += pitanje.TacanBodovi;
+                uow.Commit();
+            }
+            TestsViewModel tvm = new TestsViewModel();
+            tvm.TestId = idTesta;
+            List<Pitanje> pitanja = uow.Pitanje.GetAll().Where(p => p.TestId == tvm.TestId).ToList();
+            List<Checkbox> checkboxes = pitanja.OfType<Checkbox>().ToList();
+            List<Dopuna> dopune = pitanja.OfType<Dopuna>().ToList();
+            //namestiti da linkovi za pitanja koja su vec pogadjana budu disable
+            //tj da ne moze u isto pitanje da se udje dva puta
+            //isto vazi i za test
+            tvm.Checkboxes = checkboxes;
+            tvm.Dopune = dopune;
+            return View("PitanjaKorisnik", tvm);
+        }
+
+        [LoggedInKorisnik]
+
+        public ActionResult PitanjaCheckboxKorisnik([FromRoute(Name = "id")] int id)
+        {
+            ViewBag.IsLoggedInKorisnik = true;
+            Checkbox model = (Checkbox)uow.Pitanje.FindById(new Dopuna { PitanjeId = id });
+            CheckboxViewModel cvm = new CheckboxViewModel
+            {
+                Naziv = model.Naziv,
+                NetacanOdgovor1 = model.NetacanOdgovor1,
+                NetacanOdgovor2 = model.NetacanOdgovor2,
+                NetacanOdgovor3 = model.NetacanOdgovor3,
+                PitanjeId = model.PitanjeId,
+                TacanOdgovor = model.TacanOdgovor,
+                TacanBodovi = model.TacanBodovi
+            };
+            return View("PitanjaCheckboxKorisnik", cvm);
         }
 
     }
