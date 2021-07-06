@@ -112,7 +112,7 @@ namespace WebApp.Controllers
             ViewBag.Naziv = HttpContext.Session.GetString("naziv");
             return View("SadrzajLekcije");
         }
-        [LoggedInAdministrator] //proveri mislim da ovo nije implementirano nikako
+        [LoggedInAdministrator] 
         public ActionResult Edit(int id)
         {
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
@@ -127,7 +127,7 @@ namespace WebApp.Controllers
             ViewBag.IsLoggedInAdministrator = true;
             Kurs model = unitOfWork.Kurs.FindById(new Kurs { KursId = id });
             HttpContext.Session.SetInt32("kursid", model.KursId);
-            return View(model); //ovo je kurs i za njega prikazi ono sto se trazi u View-u
+            return View(model); 
         }
 
         [LoggedInKorisnik]

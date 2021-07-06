@@ -3,9 +3,7 @@
     ViewData["Title"] = "Kursevi";
 }
 
-<form method="post" asp-controller="Kurs" asp-action="Create">
-    <input type="submit" value="Dodaj novi" class="btn btn-light" style="margin-left: 3%;" asp-controller="Kurs" asp-action="Create" />
-</form>
+
 <h1 style="text-align: center; margin-bottom: 2%;">Kursevi:</h1>
 <table class="table table-hover" style="background-color:white">
     <thead class="thead-dark">
@@ -13,24 +11,26 @@
             <th>Redni broj</th>
             <th>Naziv kursa</th>
             <th>Detalji</th>
-            <th>Edit</th>
+            
             <th>Delete</th>
         </tr>
     </thead>
     <tbody>
         @foreach (Kurs k in Model)
         {
-            <tr>
-                <td>@k.KursId</td>
-                <td>@k.NazivKursa</td>
-                <td>@Html.ActionLink("Detalji", "Details", "Kurs", new { id = k.KursId })</td>
-                <td>@Html.ActionLink("Edit", "Edit", "Kurs", new { id = k.KursId })</td>
-                <td>@Html.ActionLink("Delete", "Delete", "Kurs", new { id = k.KursId })</td>
-            </tr>
+        <tr>
+            <td>@k.KursId</td>
+            <td>@k.NazivKursa</td>
+            <td>@Html.ActionLink("Detalji", "Details", "Kurs", new { id = k.KursId })</td>
+            @*<td>@Html.ActionLink("Edit", "Edit", "Kurs", new { id = k.KursId })</td>*@
+            <td>@Html.ActionLink("Delete", "Delete", "Kurs", new { id = k.KursId })</td>
+        </tr>
         }
     </tbody>
 </table>
-
+<form method="post" asp-controller="Kurs" asp-action="Create">
+    <input type="submit" value="Dodaj novi" class="btn btn-light" style="margin-left: 88%;" asp-controller="Kurs" asp-action="Create" />
+</form>
 @*
     <form method="post" asp-controller="Kurs" asp-action="Create">
         <input type="submit" value="Dodaj novi" asp-controller="Kurs" asp-action="Create" />

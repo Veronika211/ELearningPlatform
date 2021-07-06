@@ -1,11 +1,11 @@
 ﻿@model Kurs
 
-<h1> Kurs</h1>
-<h3>ID kursa: @Model.KursId</h3>
-<h3>Naziv: @Model.NazivKursa</h3>
+
+<h3 style="display:none">ID kursa: @Model.KursId</h3>
+<h3> @Model.NazivKursa</h3>
 
 
-<h1>Lekcije: </h1>
+<h3>Lekcije: </h3>
 
 
 <table class="table table-hover">
@@ -34,8 +34,12 @@
 </table>
 <div>
     <form asp-controller="Kurs" asp-action="UnosLekcije">
-        <input type="submit" value="Unesi novu lekciju" asp-controller="Kurs" asp-action="UnosLekcije" />
+        <input type="submit" value="Unesi novu lekciju" asp-controller="Kurs"  class="btn btn-primary" asp-action="UnosLekcije" style="margin-left:85%" />
     </form>
 </div>
-
+<style>
+    .a{
+        color:white;
+    }
+</style>
 

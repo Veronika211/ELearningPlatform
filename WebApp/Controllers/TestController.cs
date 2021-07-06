@@ -12,7 +12,7 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
-    [LoggedInBoth] //ovo znaci valjda da svemu moze da pristupi korisnik samo koji je prijavljen
+    [LoggedInBoth] 
     public class TestController : Controller
     {
         private readonly IUnitOfWork uow;
@@ -24,7 +24,7 @@ namespace WebApp.Controllers
 
         public ActionResult Index(TestsViewModel tvm)
         {
-            int? korisnikid = HttpContext.Session.GetInt32("korisnikid"); //vraca null ako ne postoji, zato ?
+            int? korisnikid = HttpContext.Session.GetInt32("korisnikid"); 
             int? administratorid = HttpContext.Session.GetInt32("administratorid");
             if (korisnikid != null)
             {
@@ -32,7 +32,7 @@ namespace WebApp.Controllers
             }
             if(administratorid!=null)
                 ViewBag.IsLoggedInAdministrator = true;
-            tvm.Testovi = uow.Test.GetAll(); //definisala sam sta su testovi
+            tvm.Testovi = uow.Test.GetAll(); 
             return View(tvm);
         }
         [LoggedInKorisnik]
@@ -44,7 +44,7 @@ namespace WebApp.Controllers
            int idKorisnika = (int)HttpContext.Session.GetInt32("korisnikid");
             //proverim da li postoji polaganje sa ovim korisnikom i svakim od testova, ako 
             //ne postoji onda prikazati test,
-            //ako postoji ne prikazuj ga jer ne moze da ga polaze opet xd
+            //ako postoji ne prikazuj ga jer ne moze da ga polaze opet 
             tvm.Testovi = uow.Test.GetAll().Where(t => t.KursId == kursId).ToList();
             //ovo su svi testovi tog kursa
             //mozda mogu da brisem ako postoji i da vratim ovaj tvm
@@ -360,15 +360,11 @@ namespace WebApp.Controllers
                     }
                 }
             }
-
             TestsViewModel tvm = new TestsViewModel();
             tvm.TestId = idTesta;
             List<Pitanje> pitanja = uow.Pitanje.GetAll().Where(p => p.TestId == tvm.TestId).ToList();
             List<Checkbox> checkboxes = pitanja.OfType<Checkbox>().ToList();
             List<Dopuna> dopune = pitanja.OfType<Dopuna>().ToList();
-            //namestiti da linkovi za pitanja koja su vec pogadjana budu disable
-            //tj da ne moze u isto pitanje da se udje dva puta
-            //isto vazi i za test
             tvm.Checkboxes = checkboxes;
             tvm.Dopune = dopune;
             return View("PitanjaKorisnik", tvm);
@@ -424,9 +420,6 @@ namespace WebApp.Controllers
             List<Pitanje> pitanja = uow.Pitanje.GetAll().Where(p => p.TestId == tvm.TestId).ToList();
             List<Checkbox> checkboxes = pitanja.OfType<Checkbox>().ToList();
             List<Dopuna> dopune = pitanja.OfType<Dopuna>().ToList();
-            //namestiti da linkovi za pitanja koja su vec pogadjana budu disable
-            //tj da ne moze u isto pitanje da se udje dva puta
-            //isto vazi i za test
             tvm.Checkboxes = checkboxes;
             tvm.Dopune = dopune;
             return View("PitanjaKorisnik", tvm);

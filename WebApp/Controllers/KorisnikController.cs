@@ -46,7 +46,6 @@ namespace WebApp.Controllers
                         HttpContext.Session.SetInt32("idk", korisnik.KorisnikId);
                         HttpContext.Session.Set("korisnik", JsonSerializer.SerializeToUtf8Bytes(korisnik)); //serijalizujemo celog korisnika
                         
-                        //ne znam da li sme da se ima ova promenljiva i kako ce se koristiti
                         return RedirectToAction("Kurs", "Kurs");
                     }
                 }
