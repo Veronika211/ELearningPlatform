@@ -1,42 +1,89 @@
 ﻿@model WebApp.Models.TestsViewModel
 
-@{
-    ViewData["Title"] = "Testovi";
-}
+    @{
+        ViewData["Title"] = "Testovi";
+    }
+        <div class="testContainer">
+            @foreach (Test t in Model.Testovi)
+            {
 
+            <div class="imageLevel">
+                @if (t.Nivo == "I")
+                {
+                    <img src="http://127.0.0.1:8444/krugovi.png" style="width:180px;height:180px;display:flex;" />
+                }
+                else if (t.Nivo == "II")
+                {
+                    <img src="http://127.0.0.1:8444/krugoviS.png" style="width:180px;height:180px;display:flex;" />
+                }
+                else
+                {
+                    <img src="http://127.0.0.1:8444/krugoviN.png" style="width:180px;height:180px;display:flex;" />
+                }
+                @Html.DisplayFor(modelItem => t.TestId)
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Test ID
-            </th>
-            <th>
-                Kurs
-            </th>
-            <th>
-                Nivo
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Test t in Model.Testovi)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => t.TestId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => t.KursId)
-                </td>
-                <td>
+                @Html.DisplayFor(modelItem => t.KursId)
+
                     @Html.DisplayFor(modelItem => t.Nivo)
-                </td>
-                <td>
-                    @Html.ActionLink("Zapocni test", "PitanjaKorisnik", "Test", new { id = t.TestId }, null)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+                <button class="btn btn-light" style="margin-top:10%;">  @Html.ActionLink("Zapocni test", "PitanjaKorisnik", "Test", new { id = t.TestId }, null) </button>
+                </div>
+                }
+                </div>
+                <style>
+                    .imageLevel {
+                        margin: 5% 9%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .testContainer {
+                        display: flex;
+                        flex-wrap: wrap;
+                    }
+                </style>
+@*
+
+                @{
+                    ViewData["Title"] = "Testovi";
+                }
+
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Test ID
+                            </th>
+                            <th>
+                                Kurs
+                            </th>
+                            <th>
+                                Nivo
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Test t in Model.Testovi)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => t.TestId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => t.KursId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => t.Nivo)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Zapocni test", "PitanjaKorisnik", "Test", new { id = t.TestId }, null)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                *@

@@ -110,7 +110,7 @@ namespace WebApp.Controllers
                 bool exists = false;
                 foreach(Polaganje p in polaganja)
                 {
-                    if(p.Test.TestId==idTesta && p.KorisnikId == korisnikid)
+                    if(p.TestId==idTesta && p.KorisnikId == korisnikid)
                     {
                         exists = true;
                         break;
