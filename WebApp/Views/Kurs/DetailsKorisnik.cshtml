@@ -1,28 +1,101 @@
 ﻿@model Kurs
 
-<h1> Kurs</h1>
-<h3>ID kursa: @Model.KursId</h3>
-<h3>Naziv: @Model.NazivKursa</h3>
 
+<div class="titles">
+    <h1> Kurs</h1>
+    @*<h3>ID kursa: @Model.KursId</h3>*@
+    <h3> @Model.NazivKursa</h3>
+</div>
+<div class="lesBody">
+    @*Redni broj
+        Naziv lekcije
+        Sadrzaj*@
 
-<h1>Lekcije: </h1>
-<table class="table table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th>Redni broj</th>
-            <th>Naziv lekcije</th>
-            <th>Sadrzaj</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{ int rowNo = 0; }
+    <div class="lesContainer">
         @foreach (Lekcija l in Model.Lekcije)
         {
-        <tr>
-            <td>@{rowNo++;} @rowNo</td>
-            <td>@l.Naziv</td>
-            <td>@Html.ActionLink("Sadrzaj", "PrikaziSadrzaj", "Kurs", new { id = l.LekcijaId })</td>
-        </tr>
+            <div class="card">
+                <div class="card-body">
+                    @*@l.LekcijaId*@
+                    <h5 class="card-title">
+                        @l.Naziv
+                    </h5>
+                    @Html.ActionLink("Sadrzaj", "PrikaziSadrzaj", "Kurs", new { id = l.LekcijaId })
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>
+<style>
+    .lesContainer {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .card:hover {
+        background-color: lightgrey;
+    }
+
+    .card {
+        border: 1px solid #dcdacb;
+        margin: 2%;
+        border-radius: 4px;
+        padding: .8rem 1.6rem;
+        color: #0f7c90;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 100%;
+    }
+
+        .card a {
+            color: black;
+        }
+
+    .titles {
+        text-align: center;
+        color: white;
+    }
+
+        .titles h1 {
+            font-weight: 400;
+        }
+
+    .lesBody {
+        margin: 2%;
+    }
+
+        .lesBody h1 {
+            color: white;
+        }
+</style>
+
+@*
+    <h1> Kurs</h1>
+    <h3>ID kursa: @Model.KursId</h3>
+    <h3>Naziv: @Model.NazivKursa</h3>
+
+
+    <h1>Lekcije: </h1>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Redni broj</th>
+                <th>Naziv lekcije</th>
+                <th>Sadrzaj</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int rowNo = 0; }
+            @foreach (Lekcija l in Model.Lekcije)
+            {
+            <tr>
+                <td>@{rowNo++;} @rowNo</td>
+                <td>@l.Naziv</td>
+                <td>@Html.ActionLink("Sadrzaj", "PrikaziSadrzaj", "Kurs", new { id = l.LekcijaId })</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+*@

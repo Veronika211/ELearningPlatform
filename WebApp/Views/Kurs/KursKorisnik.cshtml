@@ -3,26 +3,103 @@
     ViewData["Title"] = "Kursevi";
 }
 
-<h1>Kursevi: </h1>
-<table class="table table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th>Redni broj</th>
-            <th>Naziv kursa</th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{ int rowNo = 0; }
-        @foreach (Kurs k in Model)
-        {
-            <tr>
-                <td>@{rowNo++;} @rowNo</td>
-                <td>@k.NazivKursa</td>
-                <td>@Html.ActionLink("Pogledaj lekcije", "DetailsKorisnik", "Kurs", new { id = k.KursId })</td>
-                <td>@Html.ActionLink("Testovi", "PrikaziTestKorsnik", "Test", new { id = k.KursId })</td>
-            </tr>
+<h1 style="text-align:center;color:white;font-weight:400;">Kursevi </h1>
+<div class="courseCont">
+  
+    @foreach (Kurs k in Model)
+    {
+        <div class="card" style="width: 40%; margin:2%; display:flex; flex-direction:column; height:300px; font-weight:500;">
+            @if (@k.NazivKursa == "Napredna Java")
+            {
+                <img class="card-img-top" src="https://hackr.io/blog/best-java-courses/thumbnail/large" style="height: 160px;" alt="Card image cap">
+            }
+            else if (@k.NazivKursa == "Napredne .NET tehnologije")
+            {
+                <img class="card-img-top" src="https://miro.medium.com/max/680/0*whPt9R9BXJ5xotoh.jpg" style="height: 160px;" alt="Card image cap">
+            }
+            else if (@k.NazivKursa == "Projektovanje informacionih sistema")
+            {
+                <img class="card-img-top" src="https://static.twproject.com/site/wp-content/uploads/project-management-software-in-mother-tongue-1130x750.png" style="height: 160px;" alt="Card image cap">
+            }
+            else if (@k.NazivKursa == "Osnove teorije igara")
+            {
+                <img class="card-img-top" src="https://cdn.corporatefinanceinstitute.com/assets/game-theory.png" style="height: 160px;" alt="Card image cap">
+            }
+            else
+            {
+                <img class="card-img-top" src="https://5.imimg.com/data5/MK/MF/GA/SELLER-22577115/it-courses-250x250.jpg" style="height: 160px;" alt="Card image cap">
+            }
+            <div class="card-body d-flex flex-column">
+                @*<td>@k.KursId</td>*@
+                <h5 class="card-title" style="font-size:17px">@k.NazivKursa</h5>
+                <div class="cardButtons">
+                    <div class="link mt-auto">
+                        @Html.ActionLink("Lekcije", "DetailsKorisnik", "Kurs", new { id = k.KursId })
+                    </div>
+                    <div class="link mt-auto">
+                        @Html.ActionLink("Testovi", "PrikaziTestKorsnik", "Test", new { id = k.KursId })
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<style>
+    .link {
+        background-color: indianred;
+        color: white;
+        width: 90px;
+        height: 40px;
+        text-align: center;
+        /*vertical-align: central;*/
+        line-height: 40px;
+        border-radius: 5px;
+        text-decoration: none;
+        /*margin-top: 15px;*/
+        transition: 0.5s;
+        font-size: 12px;
+    }
+
+        .link a {
+            color: white;
+            text-decoration: none;
+            width: 90px;
         }
-    </tbody>
-</table>
+
+    .cardButtons {
+        display: flex;
+        justify-content: space-between;
+        height: 100%;
+        align-content: flex-end;
+    }
+
+    .courseCont {
+        display: flex;
+    }
+</style>
+@*
+
+    <h1>Kursevi: </h1>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Redni broj</th>
+                <th>Naziv kursa</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int rowNo = 0; }
+            @foreach (Kurs k in Model)
+            {
+                <tr>
+                    <td>@{rowNo++;} @rowNo</td>
+                    <td>@k.NazivKursa</td>
+                    <td>@Html.ActionLink("Pogledaj lekcije", "DetailsKorisnik", "Kurs", new { id = k.KursId })</td>
+                    <td>@Html.ActionLink("Testovi", "PrikaziTestKorsnik", "Test", new { id = k.KursId })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    *@

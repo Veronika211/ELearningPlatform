@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApp</title>
+    <title>@ViewData["Title"] - Ucite sa nama</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body>
+<body class="body">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+            <div>
                 <a class="navbar-brand" asp-area="" asp-controller="Kurs" asp-action="Kurs"></a>
-        
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -57,15 +57,14 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div>
+        <main role="main">
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="containerFotter">
+            &copy; 2021 - Ucite sa nama - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -73,4 +72,29 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
+
 </html>
+
+<style>
+    .body {
+        margin-bottom: 0;
+        background-image: url("https://media.istockphoto.com/photos/empty-chalkboard-texture-background-greenboard-blackboard-school-picture-id1054630456?k=6&m=1054630456&s=170667a&w=0&h=2lLYTFPEZpkaemwa3JTYJaXTOlm4aZsXV8itUUTnMF4=");
+        background-size: cover;
+    }
+
+    .containerFotter {
+        background-color: white;
+        text-align: center;
+    }
+
+    .nav-item a {
+        font-weight: 400;
+        font-size: medium;
+        width: 100%;
+    }
+
+        .nav-item a:hover {
+            color: lightgray;
+        }
+</style>
+

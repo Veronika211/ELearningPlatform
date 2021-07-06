@@ -1,34 +1,29 @@
 ﻿@model WebApp.Models.RegisterViewModel
 
-<h4>RegisterViewModel</h4>
-<hr />
-<div class="row">
-    <div class="w-100 p-3">
+
+<div class="containerLog">
+    <h1 class="h1">Registracija</h1>
+    <hr />
+    <div class="form">
         <form asp-action="Register">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" type="password"/>
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ime" class="control-label"></label>
-                <input asp-for="Ime" class="form-control" />
-                <span asp-validation-for="Ime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Prezime" class="control-label"></label>
-                <input asp-for="Prezime" class="form-control" />
-                <span asp-validation-for="Prezime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-primary" />
-            </div>
+            @*<label asp-for="Username" class="control-label"></label>*@
+            <input asp-for="Username" class="input" placeholder="Korisničko ime" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+
+            <input asp-for="Password" class="input" placeholder="Šifra" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+
+
+            <input asp-for="Ime" class="input" placeholder="Ime" />
+            <span asp-validation-for="Ime" class="text-danger"></span>
+
+            <input asp-for="Prezime" class="input" placeholder="Prezime" />
+            <span asp-validation-for="Prezime" class="text-danger"></span>
+
+
+            <input type="submit" value="Registrujte se" class="button" />
+
         </form>
     </div>
 </div>
@@ -37,3 +32,121 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-weight: 300;
+    }
+
+    .containerLog {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        align-items: center;
+        background: transparent;
+    }
+
+    .h1 {
+        font-size: 40px;
+        transition-duration: 1s;
+        font-weight: 200;
+        color: white;
+    }
+
+    .form {
+        position: relative;
+        z-index: 2;
+    }
+
+    .input {
+        display: block;
+        outline: 0;
+        border: 1px solid;
+        background-color: rgba(255, 255, 255, 0.3);
+        width: 250px;
+        border-radius: 5%;
+        padding: 10px 15px;
+        margin: 20px auto 20px auto;
+        display: block;
+        text-align: center;
+        font-size: 18px;
+        color: white;
+        transition-duration: 0.25s;
+        font-weight: 300;
+    }
+
+        .input:hover {
+            background-color: white;
+            opacity: 0.5;
+        }
+
+        .input:focus {
+            background-color: white;
+            width: 300px;
+            color: #5375e2;
+        }
+
+    ::-webkit-input-placeholder {
+        color: white;
+    }
+
+    .button {
+        outline: 0;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        background-color: white;
+        border: 0;
+        padding: 10px 15px;
+        color: #5375e2;
+        border-radius: 3px;
+        width: 250px;
+        cursor: pointer;
+        font-size: 18px;
+        transition-duration: 0.25s;
+    }
+
+        .button:hover {
+            background-color: rgb(245, 247, 249);
+        }
+</style>
+
+@*<hr />
+    <div class="row">
+        <div class="w-100 p-3">
+            <form asp-action="Register">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Username" class="control-label"></label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" type="password"/>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Ime" class="control-label"></label>
+                    <input asp-for="Ime" class="form-control" />
+                    <span asp-validation-for="Ime" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Prezime" class="control-label"></label>
+                    <input asp-for="Prezime" class="form-control" />
+                    <span asp-validation-for="Prezime" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Register" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+*@

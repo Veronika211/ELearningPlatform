@@ -1,4 +1,19 @@
-﻿<h1>Ovde treba da pise sadrzaj ove lekcije</h1>
-<h1>ID: @ViewBag.Id</h1>
-<h1>Naziv: @ViewBag.Naziv</h1>
-<h1>Sadrzaj: @ViewBag.Sadrzaj</h1>
+﻿<div>
+    @* <h1>ID: @ViewBag.Id</h1>*@
+    <h1> @ViewBag.Naziv</h1>
+    <p class="lContent">@ViewBag.Sadrzaj</p>
+    
+</div>
+<style>
+   
+    h1{
+        color:white;
+        text-align:center;
+    }
+    .lContent{
+        text-align:center;
+        color:white;
+        margin-top:5%;
+        font-size:25px;
+    }
+</style>
