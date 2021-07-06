@@ -1,28 +1,45 @@
 ﻿@model WebApp.Models.CheckboxViewModel
-
-@Model.Naziv
-@Model.PitanjeId
-<h6>Vas odgovor:</h6>
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="PotvrdiOdgovorCheckbox" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-<div class="form-group">
-                <div class="col-md-10">
-                    @Html.RadioButtonFor(model => model.Odgovor, Model.TacanOdgovor)
-                    @Model.TacanOdgovor
-                    @Html.RadioButtonFor(model => model.Odgovor, Model.NetacanOdgovor1)
-                    @Model.NetacanOdgovor1
-                    @Html.RadioButtonFor(model => model.Odgovor, Model.NetacanOdgovor2)
-                    @Model.NetacanOdgovor2
-                    @Html.RadioButtonFor(model => model.Odgovor, Model.NetacanOdgovor3)
-                    @Model.NetacanOdgovor3
-                </div>
+    <div class="pContainer">
+        <div style="margin-left:35px">
+            @Model.Naziv
+            <br />
+            @Model.PitanjeId
+            <h6>Vas odgovor:</h6>
+        </div>
+        <div class="row" style="align-items: center; justify-content: center; margin-left: 80px;">
+            <div class="col-md-4">
+                <form asp-action="PotvrdiOdgovorCheckbox" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.RadioButtonFor(model => model.Odgovor, Model.TacanOdgovor)
+                            <br />
+                            @Model.TacanOdgovor
+                            <br />
+                            @Html.RadioButtonFor(model => model.Odgovor, Model.NetacanOdgovor1)
+                            <br />
+                            @Model.NetacanOdgovor1
+                            <br />
+                            @Html.RadioButtonFor(model => model.Odgovor, Model.NetacanOdgovor2)
+                            <br />
+                            @Model.NetacanOdgovor2
+                            <br />
+                            @Html.RadioButtonFor(model => model.Odgovor, Model.NetacanOdgovor3)
+                            <br />
+                            @Model.NetacanOdgovor3
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Potvrdi odgovor" class="btn btn-primary" style="margin-right:65px" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Potvrdi odgovor" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+
+<style>
+    .pContainer {
+        text-align: center;
+        margin: 2% auto;
+    }
+</style>
